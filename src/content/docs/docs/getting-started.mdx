@@ -1,0 +1,116 @@
+---
+title: Getting Started
+description: Install Arbitus and secure your MCP servers in under 5 minutes.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Arbitus is a security proxy that sits between AI agents and MCP servers. It enforces per-agent policies — authentication, rate limiting, payload filtering, and audit — before any tool call reaches your upstream.
+
+```
+Agent (Cursor, Claude, etc.)
+        │  JSON-RPC
+        ▼
+      arbitus     ← auth, rate limit, HITL, payload filter, audit
+        │
+        ▼
+  MCP Server (filesystem, database, APIs...)
+```
+
+## Install
+
+<Tabs>
+  <TabItem label="Cargo">
+    ```sh
+    cargo install arbitus
+    ```
+  </TabItem>
+  <TabItem label="Docker">
+    ```sh
+    docker pull ghcr.io/nfvelten/arbitus:latest
+    docker run --rm -p 4000:4000 \
+      -v $(pwd)/gateway.yml:/app/gateway.yml \
+      ghcr.io/nfvelten/arbitus:latest
+    ```
+  </TabItem>
+  <TabItem label="Binary">
+    Download a pre-built binary from the [releases page](https://github.com/nfvelten/arbitus/releases):
+
+    | Platform | Archive |
+    |---|---|
+    | Linux x64 (static) | `arbitus-vX.Y.Z-x86_64-unknown-linux-musl.tar.gz` |
+    | Linux ARM64 (static) | `arbitus-vX.Y.Z-aarch64-unknown-linux-musl.tar.gz` |
+    | macOS x64 | `arbitus-vX.Y.Z-x86_64-apple-darwin.tar.gz` |
+    | macOS Apple Silicon | `arbitus-vX.Y.Z-aarch64-apple-darwin.tar.gz` |
+    | Windows x64 | `arbitus-vX.Y.Z-x86_64-pc-windows-msvc.zip` |
+  </TabItem>
+  <TabItem label="From Source">
+    ```sh
+    git clone https://github.com/nfvelten/arbitus
+    cd arbitus
+    cargo build --release
+    ```
+  </TabItem>
+</Tabs>
+
+## Configure
+
+```sh
+cp gateway.example.yml gateway.yml
+```
+
+```yaml
+transport:
+  type: http
+  addr: "0.0.0.0:4000"
+  upstream: "http://localhost:3000/mcp"
+
+agents:
+  cursor:
+    allowed_tools: [read_file, list_directory]
+    rate_limit: 30
+
+  claude-code:
+    denied_tools: [write_file, delete_file]
+    rate_limit: 60
+
+rules:
+  block_patterns: ["password", "api_key", "secret"]
+```
+
+## Run
+
+```sh
+./arbitus gateway.yml
+```
+
+Agents connect to `http://localhost:4000/mcp`. The gateway enforces policies and forwards allowed requests to the upstream MCP server.
+
+## Validate config
+
+Check your config file for errors without starting the gateway:
+
+```sh
+./arbitus validate gateway.yml
+```
+
+## Query the audit log
+
+```sh
+./arbitus audit gateway-audit.db --agent cursor --outcome blocked --since 1h
+```
+
+```
+AGE            AGENT            METHOD             TOOL                   OUTCOME    REASON
+──────────────────────────────────────────────────────────────────────────────────────────────
+3s ago         cursor           tools/call         write_file             blocked    tool 'write_file' not in allowlist
+5s ago         cursor           tools/call         read_file              allowed
+──────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+## Next steps
+
+- [Configuration](/docs/configuration) — full YAML reference
+- [Usage](/docs/usage) — HTTP mode, HITL, shadow mode, federation
+- [Deployment](/docs/deployment) — Docker, Helm, HTTPS, mTLS
+- [Security](/docs/security) — encoding-aware filtering, prompt injection, OPA

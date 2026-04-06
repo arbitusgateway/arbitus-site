@@ -1,0 +1,38 @@
+---
+const problems = [
+  {
+    stat: '92% of MCP servers have security issues',
+    source: 'iEnable Research, 2026',
+    solution: 'Per-agent auth (JWT/OIDC/mTLS), encoding-aware payload filtering, and prompt injection detection — before requests reach upstream.',
+  },
+  {
+    stat: 'Agents can access anything — no guardrails',
+    source: 'MCP spec has no built-in access control',
+    solution: 'Per-agent tool allowlists and denylists with glob wildcards, rate limiting, OPA/Rego policies, and schema validation.',
+  },
+  {
+    stat: 'No visibility into what AI agents do',
+    source: 'No audit trail in standard MCP',
+    solution: 'Full audit log (SQLite, webhook, CloudEvents, OpenLineage), Prometheus metrics, OpenTelemetry traces, and a built-in dashboard.',
+  },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Why Arbitus Exists</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+      The MCP protocol has no built-in security layer. Arbitus fills that gap.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {problems.map(({ stat, source, solution }) => (
+        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+          <p class="text-lg font-bold leading-snug" style="color: var(--landing-text);">{`"${stat}"`}</p>
+          <p class="text-xs mt-2 mb-4" style="color: var(--landing-text-tertiary);">{source}</p>
+          <p class="text-sm leading-relaxed" style="color: var(--landing-text-secondary);">{solution}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

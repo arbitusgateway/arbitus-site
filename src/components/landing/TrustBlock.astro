@@ -1,0 +1,20 @@
+---
+const badges = [
+  'Pure Rust',
+  'MIT License',
+  'crates.io',
+  'Docker',
+  'Helm Chart',
+  'Sub-ms Overhead',
+];
+---
+
+<section class="py-8 px-6">
+  <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-3">
+    {badges.map((badge) => (
+      <span class="text-xs font-medium rounded-full px-4 py-1.5" style="color: var(--landing-badge-text); background-color: var(--landing-badge-bg); border: 1px solid var(--landing-badge-border);">
+        {badge}
+      </span>
+    ))}
+  </div>
+</section>

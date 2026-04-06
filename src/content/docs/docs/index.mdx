@@ -1,0 +1,37 @@
+---
+title: Documentation
+description: Arbitus documentation — the security proxy for AI agents and MCP servers.
+template: splash
+hero:
+  title: Arbitus Documentation
+  tagline: The security proxy for AI agents and MCP servers.
+  actions:
+    - text: Get Started
+      link: /docs/getting-started
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/nfvelten/arbitus
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="Getting Started" icon="rocket">
+    Install Arbitus and secure your MCP servers in under 5 minutes.
+    [Read the guide](/docs/getting-started)
+  </Card>
+  <Card title="Configuration" icon="setting">
+    Full YAML reference — transport, auth, agents, rules, secrets.
+    [Configuration reference](/docs/configuration)
+  </Card>
+  <Card title="Deployment" icon="laptop">
+    Docker, Helm, HTTPS, mTLS, stdio mode.
+    [Deployment guide](/docs/deployment)
+  </Card>
+  <Card title="Security" icon="approve-check-circle">
+    Encoding-aware filtering, prompt injection, OPA/Rego.
+    [Security features](/docs/security)
+  </Card>
+</CardGrid>

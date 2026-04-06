@@ -1,0 +1,61 @@
+---
+const largeFeatures = [
+  {
+    title: 'Human-in-the-Loop',
+    description: 'Suspend sensitive tool calls until an operator approves or rejects via REST API. Auto-reject after configurable timeout. No other OSS MCP gateway has this.',
+  },
+  {
+    title: 'Shadow Mode',
+    description: 'Intercept and log tool calls without forwarding to upstream. Dry-run risky operations before enforcing policies. Observe what new agents would do.',
+  },
+  {
+    title: 'Encoding-Aware Filtering',
+    description: 'Block patterns catch Base64, URL-encoded, double-encoded, and Unicode-obfuscated payloads. Regex alone is not enough — Arbitus decodes before matching.',
+  },
+  {
+    title: 'OPA/Rego Policies',
+    description: 'Industry-standard policy engine used by Kubernetes and Terraform. Organizations with existing OPA policies adopt without rewriting.',
+  },
+];
+
+const smallFeatures = [
+  { title: 'Per-Agent Auth', desc: 'API key, JWT/OIDC, mTLS — each agent gets its own policy.' },
+  { title: 'Rate Limiting', desc: 'Per-agent, per-tool, per-IP sliding window with standard headers.' },
+  { title: 'Schema Validation', desc: 'Validate tool arguments against inputSchema before forwarding.' },
+  { title: 'Prompt Injection Detection', desc: '7 built-in patterns with always-block mode.' },
+  { title: 'Supply-Chain Security', desc: 'SHA-256 + cosign verification of MCP server binaries.' },
+  { title: 'Tool Federation', desc: 'Aggregate tools from multiple upstreams into a single view.' },
+  { title: 'OpenAI Bridge', desc: '/openai/v1/tools and /execute for function-calling clients.' },
+  { title: 'Circuit Breaker', desc: 'Automatic upstream failure isolation with half-open recovery.' },
+  { title: 'Config Hot-Reload', desc: 'SIGUSR1 or automatic every 30 seconds — no restart needed.' },
+  { title: 'Transport Agnostic', desc: 'HTTP+SSE or stdio — same config, same policies.' },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Everything you need to secure MCP</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+      The only open-source gateway with the full security stack.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+      {largeFeatures.map(({ title, description }) => (
+        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+          <div class="w-2 h-2 rounded-full mb-4" style="background-color: var(--landing-accent-dot);" />
+          <h3 class="text-lg font-bold mb-2">{title}</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--landing-text-secondary);">{description}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {smallFeatures.map(({ title, desc }) => (
+        <div class="rounded-xl p-5" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+          <h3 class="text-sm font-bold mb-1">{title}</h3>
+          <p class="text-xs leading-relaxed" style="color: var(--landing-text-secondary);">{desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

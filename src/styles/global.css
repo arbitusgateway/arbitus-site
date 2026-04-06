@@ -1,0 +1,147 @@
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@fontsource-variable/inter';
+@import '@fontsource/jetbrains-mono';
+
+@theme {
+	--font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+	/* Cyan/teal accent — aligned with Arbitus logo */
+	--color-accent-50: #ecfeff;
+	--color-accent-100: #cffafe;
+	--color-accent-200: #a5f3fc;
+	--color-accent-300: #67e8f9;
+	--color-accent-400: #22d3ee;
+	--color-accent-500: #06b6d4;
+	--color-accent-600: #0891b2;
+	--color-accent-700: #0e7490;
+	--color-accent-800: #155e75;
+	--color-accent-900: #164e63;
+	--color-accent-950: #083344;
+
+	/* Zinc gray scale */
+	--color-gray-50: #fafafa;
+	--color-gray-100: #f4f4f5;
+	--color-gray-200: #e4e4e7;
+	--color-gray-300: #d4d4d8;
+	--color-gray-400: #a1a1aa;
+	--color-gray-500: #71717a;
+	--color-gray-600: #52525b;
+	--color-gray-700: #3f3f46;
+	--color-gray-800: #27272a;
+	--color-gray-900: #18181b;
+	--color-gray-950: #09090b;
+}
+
+/* Global resets */
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Starlight overrides ─── */
+
+/* Make the site title bold plain text, not an accent-colored link */
+.site-title {
+	font-weight: 700 !important;
+	color: var(--sl-color-text) !important;
+}
+
+/* Slightly larger logo in Starlight nav */
+.site-title img {
+	height: 2rem;
+	width: auto;
+}
+
+/* ─── Landing page theme tokens ─── */
+
+:root {
+	--landing-bg: #ffffff;
+	--landing-bg-subtle: #fafafa;
+	--landing-text: #18181b;
+	--landing-text-secondary: #52525b;
+	--landing-text-tertiary: #71717a;
+	--landing-text-muted: #a1a1aa;
+	--landing-card-bg: #ffffff;
+	--landing-card-border: #e4e4e7;
+	--landing-card-bg-hover: #f4f4f5;
+	--landing-nav-bg: rgba(255, 255, 255, 0.85);
+	--landing-divider: #e4e4e7;
+	--landing-code-bg: #18181b;
+	--landing-code-text: #d4d4d8;
+	--landing-code-accent: #67e8f9;
+	--landing-badge-bg: #f4f4f5;
+	--landing-badge-border: #d4d4d8;
+	--landing-badge-text: #3f3f46;
+	--landing-btn-primary-bg: #0891b2;
+	--landing-btn-primary-text: #ffffff;
+	--landing-btn-primary-hover: #0e7490;
+	--landing-btn-outline-border: #d4d4d8;
+	--landing-btn-outline-text: #3f3f46;
+	--landing-btn-outline-hover-border: #a1a1aa;
+	--landing-btn-outline-hover-text: #18181b;
+	--landing-gradient-from: #0891b2;
+	--landing-gradient-to: #0d9488;
+	--landing-accent-dot: #0891b2;
+	--landing-mobile-menu-bg: rgba(255, 255, 255, 0.95);
+	--landing-mobile-menu-border: #e4e4e7;
+	--landing-table-highlight: rgba(8, 145, 178, 0.06);
+	--landing-table-header-border: #d4d4d8;
+	--landing-table-row-border: #e4e4e7;
+	--landing-check: #0891b2;
+	--landing-partial: #d97706;
+	--landing-cross: #d4d4d8;
+	--landing-footer-bg: #fafafa;
+	--landing-footer-border: #e4e4e7;
+	--landing-copy-text: #a1a1aa;
+}
+
+:root[data-theme='dark'] {
+	--landing-bg: #0a0a0a;
+	--landing-bg-subtle: #0a0a0a;
+	--landing-text: #ededed;
+	--landing-text-secondary: #a1a1aa;
+	--landing-text-tertiary: #71717a;
+	--landing-text-muted: #52525b;
+	--landing-card-bg: rgba(24, 24, 27, 0.5);
+	--landing-card-border: #27272a;
+	--landing-card-bg-hover: rgba(39, 39, 42, 0.5);
+	--landing-nav-bg: rgba(10, 10, 10, 0.85);
+	--landing-divider: rgba(39, 39, 42, 0.6);
+	--landing-code-bg: rgba(24, 24, 27, 0.6);
+	--landing-code-text: #d4d4d8;
+	--landing-code-accent: #67e8f9;
+	--landing-badge-bg: rgba(24, 24, 27, 0.6);
+	--landing-badge-border: #3f3f46;
+	--landing-badge-text: #d4d4d8;
+	--landing-btn-primary-bg: #06b6d4;
+	--landing-btn-primary-text: #000000;
+	--landing-btn-primary-hover: #22d3ee;
+	--landing-btn-outline-border: #3f3f46;
+	--landing-btn-outline-text: #d4d4d8;
+	--landing-btn-outline-hover-border: #71717a;
+	--landing-btn-outline-hover-text: #ffffff;
+	--landing-gradient-from: #22d3ee;
+	--landing-gradient-to: #5eead4;
+	--landing-accent-dot: #22d3ee;
+	--landing-mobile-menu-bg: rgba(10, 10, 10, 0.95);
+	--landing-mobile-menu-border: #27272a;
+	--landing-table-highlight: rgba(34, 211, 238, 0.05);
+	--landing-table-header-border: #3f3f46;
+	--landing-table-row-border: rgba(39, 39, 42, 0.6);
+	--landing-check: #22d3ee;
+	--landing-partial: rgba(234, 179, 8, 0.7);
+	--landing-cross: #52525b;
+	--landing-footer-bg: #0a0a0a;
+	--landing-footer-border: #27272a;
+	--landing-copy-text: #52525b;
+}
+
+.landing-body {
+	background-color: var(--landing-bg);
+	color: var(--landing-text);
+}

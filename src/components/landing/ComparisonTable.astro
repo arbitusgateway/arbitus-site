@@ -1,0 +1,70 @@
+---
+const features = [
+  'Per-agent authentication',
+  'Encoding-aware payload filtering',
+  'Human-in-the-loop approval',
+  'Shadow mode',
+  'OPA/Rego policies',
+  'Supply-chain verification',
+  'HTTP + stdio transports',
+  'Sub-millisecond overhead',
+  'Open source (MIT)',
+];
+
+type Support = 'yes' | 'no' | 'partial';
+
+const competitors: { name: string; values: Support[] }[] = [
+  { name: 'Arbitus', values: ['yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'] },
+  { name: 'Other OSS', values: ['partial', 'no', 'no', 'no', 'no', 'no', 'partial', 'partial', 'yes'] },
+  { name: 'Commercial', values: ['yes', 'partial', 'partial', 'no', 'no', 'partial', 'yes', 'partial', 'no'] },
+];
+
+function icon(v: Support) {
+  if (v === 'yes') return { symbol: '✓', color: 'var(--landing-check)' };
+  if (v === 'partial') return { symbol: '~', color: 'var(--landing-partial)' };
+  return { symbol: '✗', color: 'var(--landing-cross)' };
+}
+---
+
+<section class="py-20 px-6">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">How Arbitus compares</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+      The only open-source gateway with the complete security stack.
+    </p>
+
+    <div class="overflow-x-auto rounded-xl" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      <table class="w-full text-sm">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--landing-table-header-border);">
+            <th class="text-left py-4 pl-5 pr-4 font-medium" style="color: var(--landing-text-secondary);">Feature</th>
+            {competitors.map(({ name }) => (
+              <th
+                class="text-center py-4 px-5 font-bold"
+                style={name === 'Arbitus' ? `color: var(--landing-check); background-color: var(--landing-table-highlight);` : `color: var(--landing-text-secondary);`}
+              >
+                {name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {features.map((feature, i) => (
+            <tr style={`border-bottom: 1px solid var(--landing-table-row-border);`}>
+              <td class="py-3.5 pl-5 pr-4" style="color: var(--landing-text);">{feature}</td>
+              {competitors.map(({ name, values }) => {
+                const { symbol, color } = icon(values[i]);
+                return (
+                  <td
+                    class="text-center py-3.5 px-5 text-lg font-bold"
+                    style={`color: ${color};${name === 'Arbitus' ? ' background-color: var(--landing-table-highlight);' : ''}`}
+                  >{symbol}</td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

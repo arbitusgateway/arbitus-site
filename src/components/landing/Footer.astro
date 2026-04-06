@@ -1,0 +1,79 @@
+---
+const columns = [
+  {
+    title: 'Product',
+    links: [
+      { label: 'Documentation', href: '/docs' },
+      { label: 'Getting Started', href: '/docs/getting-started' },
+      { label: 'Configuration', href: '/docs/configuration' },
+      { label: 'GitHub', href: 'https://github.com/nfvelten/arbitus', external: true },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Changelog', href: 'https://github.com/nfvelten/arbitus/blob/main/CHANGELOG.md', external: true },
+      { label: 'Architecture', href: '/docs/architecture' },
+      { label: 'Security', href: '/docs/security' },
+      { label: 'Deployment', href: '/docs/deployment' },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'MIT License', href: 'https://github.com/nfvelten/arbitus/blob/main/LICENSE', external: true },
+      { label: 'Contributing', href: 'https://github.com/nfvelten/arbitus/blob/main/CONTRIBUTING.md', external: true },
+      { label: 'crates.io', href: 'https://crates.io/crates/arbitus', external: true },
+      { label: 'Built with Astro', href: 'https://astro.build', external: true },
+    ],
+  },
+];
+---
+
+<footer class="py-16 px-6" style="border-top: 1px solid var(--landing-footer-border); background-color: var(--landing-footer-bg);">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div>
+        <a href="/" class="flex items-center gap-2.5" style="color: var(--landing-text);">
+          <img src="/arbitus-logo.png" alt="" width="24" height="24" />
+          <span class="text-base font-bold tracking-tight">Arbitus</span>
+        </a>
+        <p class="text-sm mt-3 leading-relaxed" style="color: var(--landing-text-muted);">
+          The security proxy for<br />AI agents and MCP servers.
+        </p>
+      </div>
+
+      {columns.map(({ title, links }) => (
+        <div>
+          <h4 class="text-sm font-semibold mb-4">{title}</h4>
+          <ul class="space-y-2.5">
+            {links.map(({ label, href, external }) => (
+              <li>
+                <a
+                  href={href}
+                  class="text-sm transition-colors footer-link"
+                  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 pt-8 text-center text-xs" style="border-top: 1px solid var(--landing-divider); color: var(--landing-copy-text);">
+      &copy; {new Date().getFullYear()} Arbitus. MIT Licensed.
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-link {
+    color: var(--landing-text-secondary);
+  }
+  .footer-link:hover {
+    color: var(--landing-text);
+  }
+</style>

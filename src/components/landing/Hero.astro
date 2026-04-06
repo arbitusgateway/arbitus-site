@@ -1,0 +1,75 @@
+---
+const diagram = `Agent (Cursor, Claude, etc.)
+        │  JSON-RPC
+        ▼
+      arbitus  ← auth, rate limit, HITL, filter, audit
+        │
+        ▼
+  MCP Server (filesystem, database, APIs...)`;
+---
+
+<section class="pt-32 pb-20 px-6">
+  <div class="max-w-4xl mx-auto text-center">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight">
+      <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(to right, var(--landing-gradient-from), var(--landing-gradient-to));">
+        The security proxy for AI agents and MCP servers
+      </span>
+    </h1>
+
+    <p class="mt-6 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed" style="color: var(--landing-text-secondary);">
+      Auth, rate limiting, payload filtering, and audit — before any tool call reaches your upstream.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <a
+        href="/docs/getting-started"
+        class="px-6 py-2.5 rounded-lg font-semibold transition-colors"
+        style="background-color: var(--landing-btn-primary-bg); color: var(--landing-btn-primary-text);"
+      >
+        Get Started
+      </a>
+      <a
+        href="https://github.com/nfvelten/arbitus"
+        target="_blank"
+        rel="noopener"
+        class="px-6 py-2.5 rounded-lg font-medium transition-colors"
+        style="border: 1px solid var(--landing-btn-outline-border); color: var(--landing-btn-outline-text);"
+      >
+        GitHub
+      </a>
+    </div>
+
+    <div class="mt-8 inline-flex items-center gap-3 rounded-lg px-4 py-2.5" style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
+      <code class="text-sm font-mono" style="color: var(--landing-code-accent);">cargo install arbitus</code>
+      <button
+        id="copy-install"
+        class="transition-colors"
+        style="color: var(--landing-text-muted);"
+        aria-label="Copy to clipboard"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+      </button>
+    </div>
+
+    <p class="mt-6 text-xs" style="color: var(--landing-text-muted);">
+      MIT Licensed&nbsp;&middot;&nbsp;Pure Rust&nbsp;&middot;&nbsp;Sub-millisecond overhead
+    </p>
+
+    <div class="mt-14 max-w-lg mx-auto">
+      <pre class="text-left text-[11px] sm:text-sm md:text-base font-mono rounded-xl p-4 sm:p-6 leading-relaxed overflow-x-auto" style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);"><code set:text={diagram} /></pre>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById('copy-install');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText('cargo install arbitus');
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(() => {
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+      }, 2000);
+    });
+  }
+</script>

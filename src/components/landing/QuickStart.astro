@@ -1,0 +1,66 @@
+---
+const steps = [
+  {
+    num: '1',
+    title: 'Install',
+    command: 'cargo install arbitus',
+    note: 'Single binary, no runtime dependencies.',
+  },
+  {
+    num: '2',
+    title: 'Configure',
+    command: 'cp gateway.example.yml gateway.yml\n# edit gateway.yml with your policies',
+    note: 'One YAML file controls everything.',
+  },
+  {
+    num: '3',
+    title: 'Run',
+    command: 'arbitus gateway.yml',
+    note: 'Point your agents at Arbitus instead of the MCP server.',
+  },
+];
+
+const altInstalls = [
+  { label: 'Docker', href: '/docs/deployment#docker' },
+  { label: 'Helm', href: '/docs/deployment#kubernetes' },
+  { label: 'Pre-built binaries', href: 'https://github.com/nfvelten/arbitus/releases' },
+];
+---
+
+<section class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Up and running in 60 seconds</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+      Three commands. No agents to install, no sidecars, no config servers.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {steps.map(({ num, title, command, note }) => (
+        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0" style="background-color: var(--landing-table-highlight); border: 1px solid var(--landing-accent-dot); color: var(--landing-accent-dot);">
+              {num}
+            </span>
+            <h3 class="text-lg font-bold">{title}</h3>
+          </div>
+          <pre class="text-sm font-mono rounded-lg p-3 overflow-x-auto leading-relaxed" style="background-color: var(--landing-code-bg); color: var(--landing-code-accent); border: 1px solid var(--landing-card-border);"><code set:text={command} /></pre>
+          <p class="text-sm mt-3" style="color: var(--landing-text-secondary);">{note}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm" style="color: var(--landing-text-secondary);">
+      <span>Also available via:</span>
+      {altInstalls.map(({ label, href }) => (
+        <a
+          href={href}
+          class="underline underline-offset-2 transition-colors"
+          style="color: var(--landing-text-secondary);"
+          {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+        >
+          {label}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
