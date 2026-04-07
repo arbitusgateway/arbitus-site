@@ -30,12 +30,14 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL('/arbitus-text-logo.png', canonical)} />
+    <meta property="og:image" content={new URL('/arbitus-text-logo.webp', canonical)} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL('/arbitus-text-logo.png', canonical)} />
-    <link rel="icon" href="/arbitus-logo.png" type="image/png" />
+    <meta name="twitter:image" content={new URL('/arbitus-text-logo.webp', canonical)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/arbitus-logo.png" />
+    <link rel="apple-touch-icon" href="/arbitus-logo.png" />
     {/* Inline theme detection — mirrors Starlight's ThemeProvider to share preference. Intentionally inlined to prevent FOUC. */}
     <script is:inline>
       (function() {
