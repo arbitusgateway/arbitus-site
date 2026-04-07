@@ -34,24 +34,24 @@ const smallFeatures = [
 
 <section class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Everything you need to secure MCP</h2>
-    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">Everything you need to secure MCP</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
       The only open-source gateway with the full security stack.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-      {largeFeatures.map(({ title, description }) => (
-        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      {largeFeatures.map(({ title, description }, i) => (
+        <div class={`rounded-xl p-8 transition-all hover:scale-[1.02] hover:shadow-xl reveal reveal-delay-${(i % 2) + 1}`} style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
           <div class="w-2 h-2 rounded-full mb-4" style="background-color: var(--landing-accent-dot);" />
-          <h3 class="text-lg font-bold mb-2">{title}</h3>
+          <h3 class="text-xl font-bold mb-3">{title}</h3>
           <p class="text-sm leading-relaxed" style="color: var(--landing-text-secondary);">{description}</p>
         </div>
       ))}
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {smallFeatures.map(({ title, desc }) => (
-        <div class="rounded-xl p-5" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      {smallFeatures.map(({ title, desc }, i) => (
+        <div class={`rounded-xl p-5 transition-all hover:bg-[var(--landing-card-bg-hover)] reveal reveal-delay-${(i % 3) + 1}`} style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
           <h3 class="text-sm font-bold mb-1">{title}</h3>
           <p class="text-xs leading-relaxed" style="color: var(--landing-text-secondary);">{desc}</p>
         </div>

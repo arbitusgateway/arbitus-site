@@ -1,4 +1,6 @@
 ---
+import Logo from './Logo.astro';
+
 const columns = [
   {
     title: 'Product',
@@ -34,8 +36,8 @@ const columns = [
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
       <div>
-        <a href="/" class="flex items-center gap-2.5" style="color: var(--landing-text);">
-          <img src="/arbitus-logo.png" alt="" width="24" height="24" />
+        <a href="/" class="flex items-center gap-2.5 group" style="color: var(--landing-text);">
+          <Logo class="transition-transform group-hover:scale-110" width="24" height="24" />
           <span class="text-base font-bold tracking-tight">Arbitus</span>
         </a>
         <p class="text-sm mt-3 leading-relaxed" style="color: var(--landing-text-muted);">
@@ -51,7 +53,7 @@ const columns = [
               <li>
                 <a
                   href={href}
-                  class="text-sm transition-colors footer-link"
+                  class="text-sm transition-all footer-link hover:translate-x-1 inline-block"
                   {...(external ? { target: '_blank', rel: 'noopener' } : {})}
                 >
                   {label}

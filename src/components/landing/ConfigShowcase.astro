@@ -32,13 +32,13 @@ const annotations = [
 
 <section class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">One YAML file. Full security stack.</h2>
-    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">One YAML file. Full security stack.</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
       No code, no plugins, no sidecar daemons. Configure everything in a single file.
     </p>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
-      <div class="lg:col-span-3 rounded-xl overflow-hidden" style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
+      <div class="lg:col-span-3 rounded-xl overflow-hidden reveal reveal-delay-2 shadow-2xl transition-all hover:shadow-3xl" style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
         <div class="flex items-center gap-1.5 px-4 py-3" style="border-bottom: 1px solid var(--landing-card-border);">
           <span class="w-3 h-3 rounded-full bg-red-500/70" />
           <span class="w-3 h-3 rounded-full bg-yellow-500/70" />
@@ -49,11 +49,11 @@ const annotations = [
       </div>
 
       <div class="lg:col-span-2 flex flex-col gap-3">
-        {annotations.map(({ line, note }) => (
-          <div class="rounded-xl p-4 flex items-start gap-3" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
-            <span class="mt-0.5 w-1.5 h-1.5 rounded-full shrink-0" style="background-color: var(--landing-accent-dot);" />
+        {annotations.map(({ line, note }, i) => (
+          <div class={`rounded-xl p-5 flex items-start gap-3 transition-all hover:scale-[1.02] reveal reveal-delay-${(i % 3) + 3}`} style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+            <span class="mt-1 w-2 h-2 rounded-full shrink-0" style="background-color: var(--landing-accent-dot);" />
             <div>
-              <code class="text-xs font-mono" style="color: var(--landing-accent-dot);">{line}</code>
+              <code class="text-sm font-mono font-semibold" style="color: var(--landing-accent-dot);">{line}</code>
               <p class="text-sm mt-1 leading-relaxed" style="color: var(--landing-text-secondary);">{note}</p>
             </div>
           </div>

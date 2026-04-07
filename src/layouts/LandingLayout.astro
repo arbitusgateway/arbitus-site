@@ -3,6 +3,7 @@ import '@fontsource-variable/inter';
 import '@fontsource/jetbrains-mono';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import BackgroundEffect from '../components/landing/BackgroundEffect.astro';
 
 interface Props {
   title?: string;
@@ -44,10 +45,28 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
         document.getElementById('color-scheme-meta').setAttribute('content', theme === 'light' ? 'light' : 'dark');
       })();
     </script>
+    <script>
+      const initScrollAnimations = () => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      };
+
+      document.addEventListener('astro:page-load', initScrollAnimations);
+      // Also init once on immediate load if needed
+      initScrollAnimations();
+    </script>
     <ClientRouter />
     <title>{title}</title>
   </head>
   <body class="landing-body font-sans antialiased">
+    <BackgroundEffect />
     <slot />
   </body>
 </html>

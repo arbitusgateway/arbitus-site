@@ -1,4 +1,6 @@
 ---
+import Logo from './Logo.astro';
+
 const links = [
   { label: 'Docs', href: '/docs' },
   { label: 'GitHub', href: 'https://github.com/nfvelten/arbitus', external: true },
@@ -7,8 +9,8 @@ const links = [
 
 <header id="nav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-200">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-2.5" style="color: var(--landing-text);">
-      <img src="/arbitus-logo.png" alt="" width="28" height="28" />
+    <a href="/" class="flex items-center gap-2.5 group" style="color: var(--landing-text);">
+      <Logo class="transition-transform group-hover:scale-110" />
       <span class="text-lg font-bold tracking-tight">Arbitus</span>
     </a>
 

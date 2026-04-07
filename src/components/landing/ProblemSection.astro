@@ -18,18 +18,25 @@ const problems = [
 ];
 ---
 
-<section class="py-20 px-6">
+<section class="py-20 px-6 overflow-hidden">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Why Arbitus Exists</h2>
-    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">Why Arbitus Exists</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
       The MCP protocol has no built-in security layer. Arbitus fills that gap.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {problems.map(({ stat, source, solution }) => (
-        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
-          <p class="text-lg font-bold leading-snug" style="color: var(--landing-text);">{`"${stat}"`}</p>
-          <p class="text-xs mt-2 mb-4" style="color: var(--landing-text-tertiary);">{source}</p>
+      {problems.map(({ stat, source, solution }, i) => (
+        <div 
+          class={`rounded-xl p-8 transition-all hover:scale-[1.02] hover:shadow-xl reveal reveal-delay-${(i % 3) + 1}`}
+          style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);"
+        >
+          <div class="mb-4 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-accent-500)]/10 text-[var(--color-accent-600)]">
+             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <p class="text-lg font-bold leading-snug mb-3" style="color: var(--landing-text);">{`"${stat}"`}</p>
+          <p class="text-xs uppercase tracking-wider font-semibold mb-4 opacity-60" style="color: var(--landing-text-tertiary);">{source}</p>
+          <div class="h-px w-full bg-[var(--landing-divider)] mb-4 opacity-50"></div>
           <p class="text-sm leading-relaxed" style="color: var(--landing-text-secondary);">{solution}</p>
         </div>
       ))}

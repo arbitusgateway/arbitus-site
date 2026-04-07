@@ -29,32 +29,32 @@ const altInstalls = [
 
 <section class="py-20 px-6">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">Up and running in 60 seconds</h2>
-    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">Up and running in 60 seconds</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
       Three commands. No agents to install, no sidecars, no config servers.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {steps.map(({ num, title, command, note }) => (
-        <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      {steps.map(({ num, title, command, note }, i) => (
+        <div class={`rounded-xl p-8 transition-all hover:scale-[1.02] hover:shadow-xl reveal reveal-delay-${(i % 3) + 1}`} style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
           <div class="flex items-center gap-3 mb-4">
-            <span class="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center shrink-0" style="background-color: var(--landing-table-highlight); border: 1px solid var(--landing-accent-dot); color: var(--landing-accent-dot);">
+            <span class="w-10 h-10 rounded-full text-sm font-bold flex items-center justify-center shrink-0" style="background-color: var(--landing-table-highlight); border: 1px solid var(--landing-accent-dot); color: var(--landing-accent-dot);">
               {num}
             </span>
-            <h3 class="text-lg font-bold">{title}</h3>
+            <h3 class="text-xl font-bold">{title}</h3>
           </div>
-          <pre class="text-sm font-mono rounded-lg p-3 overflow-x-auto leading-relaxed" style="background-color: var(--landing-code-bg); color: var(--landing-code-accent); border: 1px solid var(--landing-card-border);"><code set:text={command} /></pre>
-          <p class="text-sm mt-3" style="color: var(--landing-text-secondary);">{note}</p>
+          <pre class="text-sm font-mono rounded-lg p-4 overflow-x-auto shadow-inner" style="background-color: var(--landing-code-bg); color: var(--landing-code-accent); border: 1px solid var(--landing-card-border);"><code set:text={command} /></pre>
+          <p class="text-sm mt-4 leading-relaxed" style="color: var(--landing-text-secondary);">{note}</p>
         </div>
       ))}
     </div>
 
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm" style="color: var(--landing-text-secondary);">
-      <span>Also available via:</span>
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm reveal reveal-delay-4" style="color: var(--landing-text-secondary);">
+      <span class="font-medium">Also available via:</span>
       {altInstalls.map(({ label, href }) => (
         <a
           href={href}
-          class="underline underline-offset-2 transition-colors"
+          class="underline underline-offset-4 decoration-[var(--landing-accent-dot)]/30 hover:decoration-[var(--landing-accent-dot)] transition-all"
           style="color: var(--landing-text-secondary);"
           {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
         >

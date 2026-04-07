@@ -28,12 +28,12 @@ function icon(v: Support) {
 
 <section class="py-20 px-6">
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4">How Arbitus compares</h2>
-    <p class="text-center mb-14 max-w-2xl mx-auto" style="color: var(--landing-text-secondary);">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">How Arbitus compares</h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
       The only open-source gateway with the complete security stack.
     </p>
 
-    <div class="overflow-x-auto rounded-xl" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+    <div class="overflow-x-auto rounded-xl reveal reveal-delay-2 shadow-xl" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
       <table class="w-full text-sm">
         <thead>
           <tr style="border-bottom: 1px solid var(--landing-table-header-border);">
@@ -50,7 +50,7 @@ function icon(v: Support) {
         </thead>
         <tbody>
           {features.map((feature, i) => (
-            <tr style={`border-bottom: 1px solid var(--landing-table-row-border);`}>
+            <tr style={`border-bottom: 1px solid var(--landing-table-row-border);`} class="transition-colors hover:bg-[var(--landing-card-bg-hover)]">
               <td class="py-3.5 pl-5 pr-4" style="color: var(--landing-text);">{feature}</td>
               {competitors.map(({ name, values }) => {
                 const { symbol, color } = icon(values[i]);

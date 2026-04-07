@@ -8,22 +8,22 @@ const diagram = `Agent (Cursor, Claude, etc.)
   MCP Server (filesystem, database, APIs...)`;
 ---
 
-<section class="pt-32 pb-20 px-6">
+<section class="pt-32 pb-20 px-6 animate-fade-in">
   <div class="max-w-4xl mx-auto text-center">
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight animate-slide-up">
       <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(to right, var(--landing-gradient-from), var(--landing-gradient-to));">
         The security proxy for AI agents and MCP servers
       </span>
     </h1>
 
-    <p class="mt-6 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed" style="color: var(--landing-text-secondary);">
+    <p class="mt-6 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed animate-slide-up [animation-delay:200ms] opacity-0 [animation-fill-mode:forwards]" style="color: var(--landing-text-secondary);">
       Auth, rate limiting, payload filtering, and audit — before any tool call reaches your upstream.
     </p>
 
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4 animate-slide-up [animation-delay:400ms] opacity-0 [animation-fill-mode:forwards]">
       <a
         href="/docs/getting-started"
-        class="px-6 py-2.5 rounded-lg font-semibold transition-colors"
+        class="px-6 py-2.5 rounded-lg font-semibold transition-all hover:scale-105 active:scale-95"
         style="background-color: var(--landing-btn-primary-bg); color: var(--landing-btn-primary-text);"
       >
         Get Started
@@ -32,18 +32,18 @@ const diagram = `Agent (Cursor, Claude, etc.)
         href="https://github.com/nfvelten/arbitus"
         target="_blank"
         rel="noopener"
-        class="px-6 py-2.5 rounded-lg font-medium transition-colors"
+        class="px-6 py-2.5 rounded-lg font-medium transition-all hover:bg-[var(--landing-card-bg-hover)]"
         style="border: 1px solid var(--landing-btn-outline-border); color: var(--landing-btn-outline-text);"
       >
         GitHub
       </a>
     </div>
 
-    <div class="mt-8 inline-flex items-center gap-3 rounded-lg px-4 py-2.5" style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
+    <div class="mt-8 inline-flex items-center gap-3 rounded-lg px-4 py-2.5 animate-slide-up [animation-delay:600ms] opacity-0 [animation-fill-mode:forwards]" style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
       <code class="text-sm font-mono" style="color: var(--landing-code-accent);">cargo install arbitus</code>
       <button
         id="copy-install"
-        class="transition-colors"
+        class="transition-colors hover:text-[var(--landing-text)]"
         style="color: var(--landing-text-muted);"
         aria-label="Copy to clipboard"
       >
@@ -51,15 +51,32 @@ const diagram = `Agent (Cursor, Claude, etc.)
       </button>
     </div>
 
-    <p class="mt-6 text-xs" style="color: var(--landing-text-muted);">
+    <p class="mt-6 text-xs animate-fade-in [animation-delay:800ms] opacity-0 [animation-fill-mode:forwards]" style="color: var(--landing-text-muted);">
       MIT Licensed&nbsp;&middot;&nbsp;Pure Rust&nbsp;&middot;&nbsp;Sub-millisecond overhead
     </p>
 
-    <div class="mt-14 max-w-lg mx-auto">
-      <pre class="text-left text-[11px] sm:text-sm md:text-base font-mono rounded-xl p-4 sm:p-6 leading-relaxed overflow-x-auto" style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);"><code set:text={diagram} /></pre>
+    <div class="mt-14 max-w-lg mx-auto animate-slide-up [animation-delay:1000ms] opacity-0 [animation-fill-mode:forwards]">
+      <pre class="text-left text-[11px] sm:text-sm md:text-base font-mono rounded-xl p-4 sm:p-6 leading-relaxed overflow-x-auto shadow-2xl" style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border); transition: transform 0.3s ease-out; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"><code set:text={diagram} /></pre>
     </div>
   </div>
 </section>
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+  .animate-slide-up {
+    animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>
 
 <script>
   const btn = document.getElementById('copy-install');
