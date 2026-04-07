@@ -65,8 +65,10 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
     <ClientRouter />
     <title>{title}</title>
   </head>
-  <body class="font-sans antialiased" style="background-color: var(--landing-bg); color: var(--landing-text);">
+  <body class="font-sans antialiased" style="position: relative;">
     <BackgroundEffect />
-    <slot />
+    <div style="position: relative; z-index: 1;">
+      <slot />
+    </div>
   </body>
 </html>

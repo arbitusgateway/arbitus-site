@@ -1,41 +1,52 @@
 ---
 ---
 
-<div id="bg-container" class="fixed inset-0 pointer-events-none" style="z-index: -10;">
-  <div id="bg-grid" class="absolute inset-0"></div>
-  <div id="bg-glow" class="absolute inset-0"></div>
+<div id="bg-container" style="position: fixed; inset: 0; pointer-events: none; z-index: 0;">
+  <div id="bg-base" style="position: absolute; inset: 0;"></div>
+  <div id="bg-grid" style="position: absolute; inset: 0;"></div>
+  <div id="bg-glow" style="position: absolute; inset: 0;"></div>
 </div>
 
 <script>
   function updateBackground() {
     const isDark = document.documentElement.dataset.theme === 'dark';
-    const container = document.getElementById('bg-container');
+    const base = document.getElementById('bg-base');
     const grid = document.getElementById('bg-grid');
     const glow = document.getElementById('bg-glow');
     
-    if (!container || !grid || !glow) return;
+    if (!base || !grid || !glow) {
+      console.log('Background elements not found');
+      return;
+    }
     
     // Set base background color
-    container.style.backgroundColor = isDark ? '#0a0a0a' : '#ffffff';
+    base.style.backgroundColor = isDark ? '#0a0a0a' : '#ffffff';
     
-    // Set grid pattern
-    const gridColor = isDark ? 'rgba(113, 113, 122, 0.15)' : 'rgba(156, 163, 175, 0.12)';
+    // Set grid pattern with higher visibility
+    const gridColor = isDark ? 'rgba(113, 113, 122, 0.3)' : 'rgba(156, 163, 175, 0.25)';
     grid.style.backgroundImage = `
       linear-gradient(to right, ${gridColor} 1px, transparent 1px),
       linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)
     `;
-    grid.style.backgroundSize = '60px 60px';
-    grid.style.maskImage = 'radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%)';
-    grid.style.webkitMaskImage = 'radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%)';
+    grid.style.backgroundSize = '50px 50px';
+    grid.style.maskImage = 'radial-gradient(ellipse 100% 80% at 50% 10%, black 20%, transparent 70%)';
+    grid.style.webkitMaskImage = 'radial-gradient(ellipse 100% 80% at 50% 10%, black 20%, transparent 70%)';
     
-    // Set glow effect
-    const glowColor = isDark ? 'rgba(34, 211, 238, 0.12)' : 'rgba(6, 182, 212, 0.15)';
-    glow.style.background = `radial-gradient(circle at 50% 0%, ${glowColor} 0%, transparent 70%)`;
-    glow.style.filter = 'blur(50px)';
+    // Set glow effect - much more visible
+    const glowColor1 = isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(6, 182, 212, 0.3)';
+    const glowColor2 = isDark ? 'rgba(34, 211, 238, 0.15)' : 'rgba(6, 182, 212, 0.2)';
+    glow.style.background = `radial-gradient(ellipse 150% 50% at 50% -10%, ${glowColor1} 0%, ${glowColor2} 30%, transparent 70%)`;
+    glow.style.filter = 'blur(60px)';
+    
+    console.log('Background updated for theme:', isDark ? 'dark' : 'light');
   }
   
   // Initial update
-  updateBackground();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateBackground);
+  } else {
+    updateBackground();
+  }
   
   // Update on theme change
   const observer = new MutationObserver((mutations) => {
