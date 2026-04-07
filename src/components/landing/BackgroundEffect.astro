@@ -1,70 +1,56 @@
 ---
 ---
 
-<div class="bg-container">
-  <div class="bg-grid"></div>
-  <div class="bg-glow"></div>
+<div id="bg-container" class="fixed inset-0 pointer-events-none" style="z-index: -10;">
+  <div id="bg-grid" class="absolute inset-0"></div>
+  <div id="bg-glow" class="absolute inset-0"></div>
 </div>
 
-<style>
-  .bg-container {
-    position: fixed;
-    inset: 0;
-    z-index: -10;
-    overflow: hidden;
-    pointer-events: none;
-    background-color: var(--landing-bg);
+<script>
+  function updateBackground() {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    const container = document.getElementById('bg-container');
+    const grid = document.getElementById('bg-grid');
+    const glow = document.getElementById('bg-glow');
+    
+    if (!container || !grid || !glow) return;
+    
+    // Set base background color
+    container.style.backgroundColor = isDark ? '#0a0a0a' : '#ffffff';
+    
+    // Set grid pattern
+    const gridColor = isDark ? 'rgba(113, 113, 122, 0.15)' : 'rgba(156, 163, 175, 0.12)';
+    grid.style.backgroundImage = `
+      linear-gradient(to right, ${gridColor} 1px, transparent 1px),
+      linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)
+    `;
+    grid.style.backgroundSize = '60px 60px';
+    grid.style.maskImage = 'radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%)';
+    grid.style.webkitMaskImage = 'radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%)';
+    
+    // Set glow effect
+    const glowColor = isDark ? 'rgba(34, 211, 238, 0.12)' : 'rgba(6, 182, 212, 0.15)';
+    glow.style.background = `radial-gradient(circle at 50% 0%, ${glowColor} 0%, transparent 70%)`;
+    glow.style.filter = 'blur(50px)';
   }
-
-  .bg-grid {
-    position: absolute;
-    inset: 0;
-    background-size: 60px 60px;
-    background-image: 
-      linear-gradient(to right, rgba(156, 163, 175, 0.15) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(156, 163, 175, 0.15) 1px, transparent 1px);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%);
-  }
-
-  :global(html[data-theme='dark']) .bg-grid {
-    background-image: 
-      linear-gradient(to right, rgba(113, 113, 122, 0.2) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(113, 113, 122, 0.2) 1px, transparent 1px);
-  }
-
-  .bg-glow {
-    position: absolute;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200%;
-    height: 80%;
-    background: radial-gradient(
-      circle at center,
-      rgba(6, 182, 212, 0.2) 0%,
-      rgba(6, 182, 212, 0.1) 20%,
-      transparent 60%
-    );
-    filter: blur(40px);
-  }
-
-  :global(html[data-theme='dark']) .bg-glow {
-    background: radial-gradient(
-      circle at center,
-      rgba(34, 211, 238, 0.15) 0%,
-      rgba(34, 211, 238, 0.08) 20%,
-      transparent 60%
-    );
-    filter: blur(60px);
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 0.8;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-</style>
+  
+  // Initial update
+  updateBackground();
+  
+  // Update on theme change
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        updateBackground();
+      }
+    });
+  });
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  });
+  
+  // Re-initialize after Astro View transitions
+  document.addEventListener('astro:page-load', updateBackground);
+</script>
