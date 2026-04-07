@@ -46,12 +46,14 @@
     
     getColor(opacity = 0.5) {
       const isDark = document.documentElement.dataset.theme === 'dark';
-      return isDark ? `rgba(34, 211, 238, ${opacity})` : `rgba(6, 182, 212, ${opacity})`;
+      // Cyan for light mode, brighter cyan for dark mode
+      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(20, 184, 166, ${opacity})`;
     }
     
     getGridColor(opacity = 0.08) {
       const isDark = document.documentElement.dataset.theme === 'dark';
-      return isDark ? `rgba(113, 113, 122, ${opacity})` : `rgba(156, 163, 175, ${opacity})`;
+      // Light grid lines for both modes
+      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(180, 160, 120, ${opacity})`;
     }
     
     init() {
@@ -175,7 +177,7 @@
     animate() {
       // Clear with background color
       const isDark = document.documentElement.dataset.theme === 'dark';
-      this.ctx.fillStyle = isDark ? '#0a0a0a' : '#ffffff';
+      this.ctx.fillStyle = isDark ? '#4f5b49' : '#faf1c6';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       
       // Draw layers
