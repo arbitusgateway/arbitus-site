@@ -1,60 +1,208 @@
 ---
 ---
 
-<div id="bg-container" style="position: fixed; inset: 0; pointer-events: none; z-index: 0;">
-  <div id="bg-base" style="position: absolute; inset: 0;"></div>
-  <div id="bg-grid" style="position: absolute; inset: 0;"></div>
-  <div id="bg-glow" style="position: absolute; inset: 0;"></div>
-</div>
+<canvas id="bg-canvas"></canvas>
+
+<style>
+  #bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
 
 <script>
-  function updateBackground() {
-    const isDark = document.documentElement.dataset.theme === 'dark';
-    const base = document.getElementById('bg-base');
-    const grid = document.getElementById('bg-grid');
-    const glow = document.getElementById('bg-glow');
-    
-    if (!base || !grid || !glow) {
-      console.log('Background elements not found');
-      return;
+  class NetworkBackground {
+    constructor() {
+      this.canvas = document.getElementById('bg-canvas');
+      if (!this.canvas) return;
+      
+      this.ctx = this.canvas.getContext('2d');
+      this.nodes = [];
+      this.connections = [];
+      this.mouse = { x: null, y: null };
+      this.maxNodes = 80;
+      this.connectionDistance = 150;
+      
+      this.resize();
+      this.init();
+      this.animate();
+      
+      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('mousemove', (e) => {
+        this.mouse.x = e.clientX;
+        this.mouse.y = e.clientY;
+      });
     }
     
-    // Set base background color
-    base.style.backgroundColor = isDark ? '#0a0a0a' : '#ffffff';
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
     
-    // Set grid pattern with higher visibility
-    const gridColor = isDark ? 'rgba(113, 113, 122, 0.3)' : 'rgba(156, 163, 175, 0.25)';
-    grid.style.backgroundImage = `
-      linear-gradient(to right, ${gridColor} 1px, transparent 1px),
-      linear-gradient(to bottom, ${gridColor} 1px, transparent 1px)
-    `;
-    grid.style.backgroundSize = '50px 50px';
-    grid.style.maskImage = 'radial-gradient(ellipse 100% 80% at 50% 10%, black 20%, transparent 70%)';
-    grid.style.webkitMaskImage = 'radial-gradient(ellipse 100% 80% at 50% 10%, black 20%, transparent 70%)';
+    getColor(opacity = 0.5) {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      return isDark ? `rgba(34, 211, 238, ${opacity})` : `rgba(6, 182, 212, ${opacity})`;
+    }
     
-    // Set glow effect - much more visible
-    const glowColor1 = isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(6, 182, 212, 0.3)';
-    const glowColor2 = isDark ? 'rgba(34, 211, 238, 0.15)' : 'rgba(6, 182, 212, 0.2)';
-    glow.style.background = `radial-gradient(ellipse 150% 50% at 50% -10%, ${glowColor1} 0%, ${glowColor2} 30%, transparent 70%)`;
-    glow.style.filter = 'blur(60px)';
+    getGridColor(opacity = 0.08) {
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      return isDark ? `rgba(113, 113, 122, ${opacity})` : `rgba(156, 163, 175, ${opacity})`;
+    }
     
-    console.log('Background updated for theme:', isDark ? 'dark' : 'light');
-  }
-  
-  // Initial update
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateBackground);
-  } else {
-    updateBackground();
-  }
-  
-  // Update on theme change
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.attributeName === 'data-theme') {
-        updateBackground();
+    init() {
+      const nodeCount = Math.min(this.maxNodes, Math.floor((this.canvas.width * this.canvas.height) / 20000));
+      
+      for (let i = 0; i < nodeCount; i++) {
+        this.nodes.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          radius: Math.random() * 2 + 1,
+        });
       }
-    });
+    }
+    
+    drawGrid() {
+      const gridSize = 60;
+      const ctx = this.ctx;
+      
+      ctx.strokeStyle = this.getGridColor(0.06);
+      ctx.lineWidth = 1;
+      
+      // Vertical lines
+      for (let x = 0; x <= this.canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, this.canvas.height);
+        ctx.stroke();
+      }
+      
+      // Horizontal lines
+      for (let y = 0; y <= this.canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(this.canvas.width, y);
+        ctx.stroke();
+      }
+    }
+    
+    drawGlow() {
+      const centerX = this.canvas.width / 2;
+      const centerY = this.canvas.height * 0.2;
+      const gradient = this.ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, this.canvas.width * 0.6);
+      
+      gradient.addColorStop(0, this.getColor(0.08));
+      gradient.addColorStop(0.5, this.getColor(0.04));
+      gradient.addColorStop(1, 'transparent');
+      
+      this.ctx.fillStyle = gradient;
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    
+    updateNodes() {
+      this.nodes.forEach(node => {
+        // Move
+        node.x += node.vx;
+        node.y += node.vy;
+        
+        // Bounce off edges
+        if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
+        if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
+        
+        // Keep in bounds
+        node.x = Math.max(0, Math.min(this.canvas.width, node.x));
+        node.y = Math.max(0, Math.min(this.canvas.height, node.y));
+      });
+    }
+    
+    drawNodes() {
+      this.ctx.fillStyle = this.getColor(0.5);
+      
+      this.nodes.forEach(node => {
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+      });
+    }
+    
+    drawConnections() {
+      const ctx = this.ctx;
+      
+      for (let i = 0; i < this.nodes.length; i++) {
+        for (let j = i + 1; j < this.nodes.length; j++) {
+          const dx = this.nodes[i].x - this.nodes[j].x;
+          const dy = this.nodes[i].y - this.nodes[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < this.connectionDistance) {
+            const opacity = (1 - distance / this.connectionDistance) * 0.3;
+            ctx.strokeStyle = this.getColor(opacity);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
+            ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      
+      // Connect to mouse with strongest lines
+      if (this.mouse.x && this.mouse.y) {
+        this.nodes.forEach(node => {
+          const dx = node.x - this.mouse.x;
+          const dy = node.y - this.mouse.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < this.connectionDistance * 1.5) {
+            const opacity = (1 - distance / (this.connectionDistance * 1.5)) * 0.6;
+            ctx.strokeStyle = this.getColor(opacity);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(this.mouse.x, this.mouse.y);
+            ctx.stroke();
+          }
+        });
+      }
+    }
+    
+    animate() {
+      // Clear with background color
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      this.ctx.fillStyle = isDark ? '#0a0a0a' : '#ffffff';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      // Draw layers
+      this.drawGrid();
+      this.drawGlow();
+      this.updateNodes();
+      this.drawConnections();
+      this.drawNodes();
+      
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+  
+  // Initialize
+  function initBackground() {
+    new NetworkBackground();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBackground);
+  } else {
+    initBackground();
+  }
+  
+  // Re-init on theme change
+  const observer = new MutationObserver(() => {
+    // Just need to re-get colors - the animate loop will pick up changes
   });
   
   observer.observe(document.documentElement, {
@@ -62,6 +210,8 @@
     attributeFilter: ['data-theme']
   });
   
-  // Re-initialize after Astro View transitions
-  document.addEventListener('astro:page-load', updateBackground);
+  // Re-init after Astro view transitions
+  document.addEventListener('astro:page-load', () => {
+    // Canvas continues animating, just need to recalc colors
+  });
 </script>
