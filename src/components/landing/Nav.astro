@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import SearchButton from './SearchButton.astro';
 
 const links = [
   { label: 'Docs', href: '/docs' },
@@ -24,6 +25,7 @@ const links = [
           {label}
         </a>
       ))}
+      <SearchButton />
       <button
         id="theme-toggle"
         class="p-2 rounded-lg transition-colors nav-link"
@@ -42,6 +44,7 @@ const links = [
     </nav>
 
     <div class="sm:hidden flex items-center gap-2">
+      <SearchButton />
       <button
         id="theme-toggle-mobile"
         class="p-2 rounded-lg transition-colors nav-link"

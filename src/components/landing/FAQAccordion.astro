@@ -1,0 +1,69 @@
+---
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FAQ[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="space-y-4">
+  {faqs.map((faq, index) => (
+    <div 
+      class="rounded-xl overflow-hidden transition-all"
+      style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);"
+    >
+      <button
+        class="faq-trigger w-full px-6 py-4 flex items-center justify-between text-left transition-colors group"
+        style="color: var(--landing-text);"
+        data-index={index}
+      >
+        <span class="font-semibold pr-4">{faq.question}</span>
+        <svg 
+          class="faq-icon w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:scale-110" 
+          style="color: var(--landing-accent-dot);"
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div 
+        class="faq-content hidden px-6 pb-4"
+        style="color: var(--landing-text-secondary);"
+      >
+        <p class="text-sm leading-relaxed">{faq.answer}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll('.faq-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const parent = trigger.parentElement;
+      const content = parent.querySelector('.faq-content');
+      const icon = trigger.querySelector('.faq-icon');
+      const isOpen = !content.classList.contains('hidden');
+      
+      // Close all other FAQs
+      document.querySelectorAll('.faq-content').forEach(c => {
+        c.classList.add('hidden');
+      });
+      document.querySelectorAll('.faq-icon').forEach(i => {
+        i.style.transform = 'rotate(0deg)';
+      });
+      
+      // Toggle current FAQ
+      if (!isOpen) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    });
+  });
+</script>

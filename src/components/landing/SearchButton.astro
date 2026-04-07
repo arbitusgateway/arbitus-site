@@ -1,0 +1,44 @@
+---
+---
+
+<div class="search-wrapper">
+  <button 
+    id="search-trigger" 
+    class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all nav-link hover:bg-[var(--landing-card-bg-hover)]" 
+    aria-label="Search documentation" 
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+    <span class="hidden sm:inline">Search</span>
+    <kbd class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-xs rounded" style="background: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      /
+    </kbd>
+  </button>
+</div>
+
+<style>
+  #search-trigger:hover kbd {
+    background-color: var(--landing-badge-bg);
+  }
+</style>
+
+<script>
+  const searchTrigger = document.getElementById('search-trigger');
+  
+  searchTrigger?.addEventListener('click', () => {
+    // Open Pagefind search modal
+    const pagefindModal = document.querySelector('pagefind-search-modal');
+    if (pagefindModal) {
+      pagefindModal.open();
+    }
+  });
+  
+  // Keyboard shortcut: / to open search
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      searchTrigger?.click();
+    }
+  });
+</script>
