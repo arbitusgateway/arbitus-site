@@ -1,0 +1,62 @@
+---
+---
+
+<button
+  id="back-to-top"
+  class="fixed bottom-8 right-8 z-50 p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 group"
+  style="background-color: var(--landing-btn-primary-bg); color: var(--landing-btn-primary-text);"
+  aria-label="Back to top"
+>
+  <svg 
+    class="w-6 h-6 transition-transform group-hover:-translate-y-0.5" 
+    fill="none" 
+    stroke="currentColor" 
+    viewBox="0 0 24 24"
+  >
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+  </svg>
+</button>
+
+<style>
+  #back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  #back-to-top:hover {
+    transform: translateY(-4px);
+  }
+  
+  #back-to-top:active {
+    transform: scale(0.95);
+  }
+</style>
+
+<script>
+  const backToTop = document.getElementById('back-to-top');
+  
+  function toggleBackToTop() {
+    if (window.scrollY > 500) {
+      backToTop?.classList.add('visible');
+    } else {
+      backToTop?.classList.remove('visible');
+    }
+  }
+  
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+  
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  backToTop?.addEventListener('click', scrollToTop);
+  
+  // Re-attach after Astro View Transitions
+  document.addEventListener('astro:page-load', () => {
+    const newBackToTop = document.getElementById('back-to-top');
+    newBackToTop?.addEventListener('click', scrollToTop);
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  });
+</script>

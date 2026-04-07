@@ -1,0 +1,57 @@
+---
+import LandingLayout from '../layouts/LandingLayout.astro';
+import Logo from '../components/landing/Logo.astro';
+---
+
+<LandingLayout title="404 - Page Not Found | Arbitus">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <div class="text-center max-w-2xl">
+      <div class="mb-8 animate-pulse">
+        <Logo class="w-24 h-24 mx-auto" width="96" height="96" />
+      </div>
+      
+      <h1 class="text-9xl font-black mb-4" style="background: linear-gradient(to right, var(--landing-gradient-from), var(--landing-gradient-to)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        404
+      </h1>
+      
+      <h2 class="text-3xl font-bold mb-4" style="color: var(--landing-text);">
+        Lost in the Network
+      </h2>
+      
+      <p class="text-lg mb-8" style="color: var(--landing-text-secondary);">
+        The page you're looking for doesn't exist or has been moved to another node in the network.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/" 
+          class="px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 active:scale-95 shadow-lg"
+          style="background-color: var(--landing-btn-primary-bg); color: var(--landing-btn-primary-text);"
+        >
+          Return Home
+        </a>
+        <a 
+          href="/docs" 
+          class="px-6 py-3 rounded-lg font-medium transition-all hover:bg-[var(--landing-card-bg-hover)]"
+          style="border: 1px solid var(--landing-btn-outline-border); color: var(--landing-btn-outline-text);"
+        >
+          Read Documentation
+        </a>
+      </div>
+      
+      <div class="mt-12 p-6 rounded-xl" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+        <pre class="text-sm font-mono text-left overflow-x-auto" style="color: var(--landing-code-text);"><code>Error: Page not found
+Status: 404
+Message: This packet was dropped by the security gateway
+
+Try one of these routes:
+  GET /              → Home page
+  GET /docs          → Documentation
+  POST /help         → Contact support
+
+Error code: ROUTE_NOT_FOUND
+Timestamp: {new Date().toISOString()}</code></pre>
+      </div>
+    </div>
+  </main>
+</LandingLayout>

@@ -141,6 +141,14 @@ const links = [
       themeToggleMobile.addEventListener('click', toggleTheme);
     }
 
+    // Keyboard shortcut: Ctrl/Cmd + Shift + D
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+
     const nav = document.getElementById('nav');
     const menuBtn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');

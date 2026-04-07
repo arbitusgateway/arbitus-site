@@ -1,0 +1,34 @@
+---
+---
+
+<div id="scroll-progress" class="fixed top-0 left-0 w-full h-1 z-[60]">
+  <div 
+    id="scroll-progress-bar" 
+    class="h-full transition-all duration-150 ease-out"
+    style="background: linear-gradient(to right, var(--landing-gradient-from), var(--landing-gradient-to)); width: 0%;"
+  ></div>
+</div>
+
+<script>
+  function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (progressBar) {
+      progressBar.style.width = `${scrollPercent}%`;
+    }
+  }
+  
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('resize', updateScrollProgress, { passive: true });
+  
+  // Initial call
+  updateScrollProgress();
+  
+  // Re-attach after Astro View Transitions
+  document.addEventListener('astro:page-load', () => {
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  });
+</script>

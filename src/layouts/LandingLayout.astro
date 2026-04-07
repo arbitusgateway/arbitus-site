@@ -4,6 +4,8 @@ import '@fontsource/jetbrains-mono';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import BackgroundEffect from '../components/landing/BackgroundEffect.astro';
+import ScrollProgress from '../components/landing/ScrollProgress.astro';
+import BackToTop from '../components/landing/BackToTop.astro';
 
 interface Props {
   title?: string;
@@ -15,7 +17,7 @@ const {
   description = 'Open-source security proxy that enforces per-agent policies — auth, rate limiting, payload filtering, and audit — before any tool call reaches your MCP server.',
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
+const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz';
 ---
 
 <!doctype html>
@@ -38,7 +40,27 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="512x512" href="/arbitus-logo.png" />
     <link rel="apple-touch-icon" href="/arbitus-logo.png" />
-    {/* Inline theme detection — mirrors Starlight's ThemeProvider to share preference. Intentionally inlined to prevent FOUC. */}
+    
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Arbitus",
+        "description": "The security proxy for AI agents and MCP servers",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Linux, macOS, Windows",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "url": "https://arbitus-gateway.xyz"
+      }
+    </script>
+    
+    <link rel="preconnect" href="https://github.com" />
+    <link rel="dns-prefetch" href="https://github.com" />
+    
     <script is:inline>
       (function() {
         var stored = typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
@@ -61,7 +83,6 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
       };
 
       document.addEventListener('astro:page-load', initScrollAnimations);
-      // Also init once on immediate load if needed
       initScrollAnimations();
     </script>
     <ClientRouter />
@@ -69,6 +90,8 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
   </head>
   <body class="font-sans antialiased">
     <BackgroundEffect />
+    <ScrollProgress />
     <slot />
+    <BackToTop />
   </body>
 </html>
