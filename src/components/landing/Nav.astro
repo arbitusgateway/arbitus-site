@@ -93,6 +93,16 @@ const links = [
   .nav-link:hover {
     color: var(--landing-text);
   }
+  
+  #nav {
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+  }
+  
+  #nav.scrolled {
+    background-color: var(--landing-nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 </style>
 
 <script>
@@ -137,33 +147,15 @@ const links = [
 
     if (nav) {
       const update = () => {
-        const scrollY = window.scrollY;
-        if (scrollY > 20) {
-          const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-bg').trim();
-          nav.style.backgroundColor = bgColor;
-          nav.style.backdropFilter = 'blur(12px)';
+        if (window.scrollY > 20) {
+          nav.classList.add('scrolled');
         } else {
-          nav.style.backgroundColor = 'transparent';
-          nav.style.backdropFilter = 'none';
+          nav.classList.remove('scrolled');
         }
       };
       
       window.addEventListener('scroll', update, { passive: true });
       update();
-      
-      // Update nav background when theme changes
-      const themeObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === 'data-theme') {
-            update();
-          }
-        });
-      });
-      
-      themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-theme']
-      });
     }
 
     if (menuBtn && menu) {
