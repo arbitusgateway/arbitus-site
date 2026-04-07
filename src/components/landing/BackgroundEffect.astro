@@ -46,14 +46,14 @@
     
     getColor(opacity = 0.5) {
       const isDark = document.documentElement.dataset.theme === 'dark';
-      // Cyan for light mode, brighter cyan for dark mode
-      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(20, 184, 166, ${opacity})`;
+      // Teal for light mode (stronger), bright green for dark mode
+      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(13, 148, 136, ${opacity * 1.5})`;
     }
     
     getGridColor(opacity = 0.08) {
       const isDark = document.documentElement.dataset.theme === 'dark';
-      // Light grid lines for both modes
-      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(180, 160, 120, ${opacity})`;
+      // Much stronger grid lines for light mode
+      return isDark ? `rgba(134, 239, 172, ${opacity})` : `rgba(120, 100, 80, ${opacity * 2.5})`;
     }
     
     init() {
@@ -73,8 +73,10 @@
     drawGrid() {
       const gridSize = 60;
       const ctx = this.ctx;
+      const isDark = document.documentElement.dataset.theme === 'dark';
+      const gridOpacity = isDark ? 0.06 : 0.12;
       
-      ctx.strokeStyle = this.getGridColor(0.06);
+      ctx.strokeStyle = this.getGridColor(gridOpacity);
       ctx.lineWidth = 1;
       
       // Vertical lines
@@ -98,9 +100,14 @@
       const centerX = this.canvas.width / 2;
       const centerY = this.canvas.height * 0.2;
       const gradient = this.ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, this.canvas.width * 0.6);
+      const isDark = document.documentElement.dataset.theme === 'dark';
       
-      gradient.addColorStop(0, this.getColor(0.08));
-      gradient.addColorStop(0.5, this.getColor(0.04));
+      // Stronger glow for light mode
+      const glowOpacity1 = isDark ? 0.08 : 0.15;
+      const glowOpacity2 = isDark ? 0.04 : 0.08;
+      
+      gradient.addColorStop(0, this.getColor(glowOpacity1));
+      gradient.addColorStop(0.5, this.getColor(glowOpacity2));
       gradient.addColorStop(1, 'transparent');
       
       this.ctx.fillStyle = gradient;
