@@ -45,17 +45,99 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Arbitus",
-        "description": "The security proxy for AI agents and MCP servers",
-        "applicationCategory": "SecurityApplication",
-        "operatingSystem": "Linux, macOS, Windows",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "url": "https://arbitus-gateway.xyz"
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://arbitus-gateway.xyz/#organization",
+            "name": "Arbitus",
+            "url": "https://arbitus-gateway.xyz",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://arbitus-gateway.xyz/arbitus-logo.png",
+              "width": 512,
+              "height": 512
+            },
+            "sameAs": [
+              "https://github.com/nfvelten/arbitus"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://arbitus-gateway.xyz/#website",
+            "url": "https://arbitus-gateway.xyz",
+            "name": "Arbitus",
+            "description": "The security proxy for AI agents and MCP servers",
+            "publisher": {
+              "@id": "https://arbitus-gateway.xyz/#organization"
+            }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Arbitus",
+            "description": "Open-source security proxy that enforces per-agent policies — auth, rate limiting, payload filtering, and audit — before any tool call reaches your MCP server.",
+            "applicationCategory": "SecurityApplication",
+            "operatingSystem": "Linux, macOS, Windows",
+            "url": "https://arbitus-gateway.xyz",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "publisher": {
+              "@id": "https://arbitus-gateway.xyz/#organization"
+            }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://arbitus-gateway.xyz/#webpage",
+            "url": "https://arbitus-gateway.xyz",
+            "name": "Arbitus — The security proxy for AI agents and MCP servers",
+            "isPartOf": {
+              "@id": "https://arbitus-gateway.xyz/#website"
+            },
+            "about": {
+              "@id": "https://arbitus-gateway.xyz/#organization"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://arbitus-gateway.xyz/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is Arbitus?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Arbitus is an open-source security proxy that sits between AI agents and MCP servers. It enforces per-agent policies including authentication, rate limiting, payload filtering, and audit logging before any tool call reaches your upstream MCP server."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I install Arbitus?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Install Arbitus with: cargo install arbitus. You can also use Docker (docker pull ghcr.io/nfvelten/arbitus:latest) or download pre-built binaries from the GitHub releases page."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What security features does Arbitus provide?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Arbitus provides per-agent authentication (API key, JWT/OIDC, mTLS), rate limiting, encoding-aware payload filtering, prompt injection detection, schema validation, OPA/Rego policies, human-in-the-loop approval, shadow mode for dry runs, supply-chain verification with SHA-256 and cosign, and complete audit logging."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Arbitus free and open source?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, Arbitus is MIT licensed and fully open source. It's written in pure Rust with sub-millisecond overhead and is available for free on GitHub and crates.io."
+                }
+              }
+            ]
+          }
+        ]
       }
     </script>
     
