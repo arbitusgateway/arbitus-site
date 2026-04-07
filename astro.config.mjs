@@ -38,6 +38,12 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Reference',
+					items: [
+						{ slug: 'docs/cli' },
+					],
+				},
+				{
 					label: 'Advanced',
 					items: [
 						{ slug: 'docs/audit' },

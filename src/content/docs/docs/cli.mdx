@@ -1,0 +1,332 @@
+---
+title: CLI Reference
+description: Complete reference for all Arbitus CLI commands and options.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The `arbitus` binary provides several commands for running, validating, and auditing your gateway.
+
+## Command Overview
+
+| Command | Description |
+|---------|-------------|
+| `arbitus [config]` | Start the gateway (default command) |
+| `arbitus validate <config>` | Validate configuration file |
+| `arbitus audit <db>` | Query audit log |
+| `arbitus replay <db>` | Replay recorded requests |
+| `arbitus verify-log <db>` | Verify log integrity and hash chain |
+
+## `arbitus` — Start Gateway
+
+Start the gateway with a configuration file:
+
+```sh
+arbitus gateway.yml
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `-c, --config <FILE>` | `gateway.yml` | Path to configuration file |
+| `--addr <ADDR>` | From config | Override listen address |
+| `--log-level <LEVEL>` | `info` | Log level: trace, debug, info, warn, error |
+| `--hot-reload` | `false` | Enable hot-reload on config changes (SIGUSR1) |
+| `-h, --help` | — | Show help |
+
+### Signals
+
+| Signal | Behavior |
+|--------|----------|
+| `SIGINT` | Graceful shutdown |
+| `SIGTERM` | Graceful shutdown |
+| `SIGUSR1` | Hot-reload configuration |
+
+### Examples
+
+```sh
+# Start with default config
+arbitus
+
+# Start with specific config
+arbitus -c /etc/arbitus/production.yml
+
+# Override listen address
+arbitus gateway.yml --addr 0.0.0.0:8080
+
+# Enable hot-reload
+arbitus gateway.yml --hot-reload
+
+# Debug logging
+arbitus gateway.yml --log-level debug
+```
+
+---
+
+## `arbitus validate` — Validate Config
+
+Check configuration file for errors without starting the gateway:
+
+```sh
+arbitus validate gateway.yml
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `-c, --config <FILE>` | Path to configuration file (required) |
+| `--strict` | Enable strict validation (warn on unknown fields) |
+| `-h, --help` | Show help |
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Configuration is valid |
+| 1 | Configuration has errors |
+| 2 | File not found |
+
+### Examples
+
+```sh
+# Validate default config
+arbitus validate
+
+# Validate specific config
+arbitus validate -c /etc/arbitus/config.yml
+
+# Strict validation
+arbitus validate gateway.yml --strict
+```
+
+---
+
+## `arbitus audit` — Query Audit Log
+
+Query the audit database for requests, errors, and blocked calls:
+
+```sh
+arbitus audit gateway-audit.db [OPTIONS]
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `-a, --agent <NAME>` | All agents | Filter by agent name |
+| `-o, --outcome <TYPE>` | All | Filter: allowed, blocked, shadowed |
+| `-m, --method <METHOD>` | All | Filter by JSON-RPC method |
+| `-t, --tool <NAME>` | All | Filter by tool name |
+| `--since <DURATION>` | All time | Time range: 1h, 24h, 7d, 30d |
+| `--until <DURATION>` | Now | End of time range |
+| `-l, --limit <N>` | 100 | Limit number of results |
+| `--format <FORMAT>` | table | Output format: table, json, csv |
+| `-h, --help` | — | Show help |
+
+### Output Formats
+
+#### Table (default)
+
+```
+AGE            AGENT            METHOD             TOOL                   OUTCOME    REASON
+──────────────────────────────────────────────────────────────────────────────────────────────
+3s ago         cursor           tools/call         write_file             blocked    tool 'write_file' not in allowlist
+5s ago         cursor           tools/call         read_file              allowed
+```
+
+#### JSON
+
+```sh
+arbitus audit gateway-audit.db --format json
+```
+
+```json
+[
+  {
+    "timestamp": "2026-04-07T12:34:56Z",
+    "agent": "cursor",
+    "method": "tools/call",
+    "tool": "write_file",
+    "outcome": "blocked",
+    "reason": "tool 'write_file' not in allowlist"
+  }
+]
+```
+
+#### CSV
+
+```sh
+arbitus audit gateway-audit.db --format csv > audit-export.csv
+```
+
+### Examples
+
+```sh
+# All blocked requests in the last hour
+arbitus audit gateway-audit.db --outcome blocked --since 1h
+
+# Requests from specific agent
+arbitus audit gateway-audit.db --agent claude-code
+
+# Export to JSON for analysis
+arbitus audit gateway-audit.db --format json > audit.json
+
+# Last 1000 requests
+arbitus audit gateway-audit.db --limit 1000
+
+# Specific tool calls
+arbitus audit gateway-audit.db --tool write_file --outcome blocked
+```
+
+---
+
+## `arbitus replay` — Replay Requests
+
+Replay recorded requests against a test upstream (for debugging and testing):
+
+```sh
+arbitus replay gateway-audit.db [OPTIONS]
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--upstream <URL>` | Required | Target upstream server |
+| `--agent <NAME>` | All agents | Filter requests by agent |
+| `--dry-run` | `false` | Show what would be sent without sending |
+| `--rate-limit <N>` | No limit | Max requests per second |
+| `-h, --help` | — | Show help |
+
+### Examples
+
+```sh
+# Replay all requests to test upstream
+arbitus replay gateway-audit.db --upstream http://localhost:3001/mcp
+
+# Dry-run (show what would be sent)
+arbitus replay gateway-audit.db --upstream http://localhost:3001/mcp --dry-run
+
+# Replay requests from specific agent
+arbitus replay gateway-audit.db --upstream http://test-server:3000/mcp --agent cursor
+
+# Rate-limited replay
+arbitus replay gateway-audit.db --upstream http://localhost:3001/mcp --rate-limit 10
+```
+
+---
+
+## `arbitus verify-log` — Verify Log Integrity
+
+Verify the hash chain and integrity of the audit log:
+
+```sh
+arbitus verify-log gateway-audit.db
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--detailed` | Show each entry verification |
+| `-h, --help` | Show help |
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Log integrity verified |
+| 1 | Log corrupted or tampered |
+| 2 | Database error |
+
+### Output
+
+```
+Verifying audit log integrity...
+
+✓ Entry 1: hash verified
+✓ Entry 2: hash verified (previous hash matches)
+✓ Entry 3: hash verified (previous hash matches)
+...
+✓ Entry 1247: hash verified (previous hash matches)
+
+Log integrity verified: 1247 entries, 0 corrupted
+
+Chain root: a3f2b8c9d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1
+First entry: 2026-04-01T00:00:00Z
+Last entry:  2026-04-07T12:34:56Z
+```
+
+### Examples
+
+```sh
+# Basic verification
+arbitus verify-log gateway-audit.db
+
+# Detailed output
+arbitus verify-log gateway-audit.db --detailed
+```
+
+---
+
+## Global Options
+
+These options apply to all commands:
+
+| Flag | Description |
+|------|-------------|
+| `-v, --version` | Print version information |
+| `-h, --help` | Show help |
+| `--log-level <LEVEL>` | Override log level |
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `ARBITUS_CONFIG` | Default configuration file path |
+| `ARBITUS_LOG_LEVEL` | Default log level |
+| `ARBITUS_ADDR` | Default listen address |
+
+Environment variables can be used to set defaults. Command-line flags take precedence.
+
+```sh
+# Set default config location
+export ARBITUS_CONFIG=/etc/arbitus/gateway.yml
+
+# Run with defaults
+arbitus
+```
+
+## Configuration File
+
+The configuration file uses YAML format. See the [Configuration](/docs/configuration) reference for all options.
+
+```yaml
+# Minimal configuration
+transport:
+  type: http
+  addr: "0.0.0.0:4000"
+  upstream: "http://localhost:3000/mcp"
+
+agents:
+  default:
+    rate_limit: 60
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | Error (configuration, runtime, etc.) |
+| 2 | Invalid arguments |
+| 130 | Interrupted (SIGINT) |
+| 143 | Terminated (SIGTERM) |
+
+## Next Steps
+
+- [Configuration](/docs/configuration) — Full YAML reference
+- [Audit](/docs/audit) — Audit backends and formats
+- [Deployment](/docs/deployment) — Production deployment guide
