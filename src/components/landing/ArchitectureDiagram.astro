@@ -1,0 +1,88 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`architecture-diagram ${className}`}>
+  <svg viewBox="0 0 400 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <polygon points="0 0, 10 3, 0 6" fill="var(--landing-accent-dot)" />
+      </marker>
+    </defs>
+    
+    <!-- Agent Layer -->
+    <g class="agent-layer">
+      <rect x="150" y="10" width="100" height="50" rx="8" fill="var(--landing-card-bg)" stroke="var(--landing-card-border)" stroke-width="2"/>
+      <text x="200" y="40" text-anchor="middle" font-size="14" font-weight="600" fill="var(--landing-text)">AI Agents</text>
+      <text x="200" y="55" text-anchor="middle" font-size="10" fill="var(--landing-text-muted)">Cursor, Claude, etc.</text>
+    </g>
+    
+    <!-- Arrow down -->
+    <line x1="200" y1="60" x2="200" y2="90" stroke="var(--landing-accent-dot)" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="220" y="80" font-size="10" fill="var(--landing-text-secondary)">JSON-RPC</text>
+    
+    <!-- Arbitus Layer -->
+    <g class="arbitus-layer">
+      <rect x="125" y="95" width="150" height="70" rx="8" fill="var(--landing-card-bg)" stroke="var(--landing-accent-dot)" stroke-width="3"/>
+      <text x="200" y="125" text-anchor="middle" font-size="16" font-weight="700" fill="var(--landing-accent-dot)">Arbitus</text>
+      <text x="200" y="145" text-anchor="middle" font-size="10" fill="var(--landing-text-muted)">auth • rate limit • filter</text>
+      <text x="200" y="158" text-anchor="middle" font-size="10" fill="var(--landing-text-muted)">audit • HITL</text>
+    </g>
+    
+    <!-- Arrow down -->
+    <line x1="200" y1="165" x2="200" y2="195" stroke="var(--landing-accent-dot)" stroke-width="2" marker-end="url(#arrowhead)"/>
+    
+    <!-- MCP Server Layer -->
+    <g class="mcp-layer">
+      <rect x="100" y="200" width="80" height="50" rx="8" fill="var(--landing-card-bg)" stroke="var(--landing-card-border)" stroke-width="2"/>
+      <text x="140" y="225" text-anchor="middle" font-size="12" font-weight="600" fill="var(--landing-text)">Filesystem</text>
+      <text x="140" y="240" text-anchor="middle" font-size="9" fill="var(--landing-text-muted)">MCP Server</text>
+      
+      <rect x="100" y="200" width="200" height="50" rx="8" fill="none" stroke="var(--landing-card-border)" stroke-width="0"/>
+      <rect x="190" y="200" width="80" height="50" rx="8" fill="var(--landing-card-bg)" stroke="var(--landing-card-border)" stroke-width="2"/>
+      <text x="230" y="225" text-anchor="middle" font-size="12" font-weight="600" fill="var(--landing-text)">Database</text>
+      <text x="230" y="240" text-anchor="middle" font-size="9" fill="var(--landing-text-muted)">MCP Server</text>
+      
+      <rect x="280" y="200" width="80" height="50" rx="8" fill="var(--landing-card-bg)" stroke="var(--landing-card-border)" stroke-width="2"/>
+      <text x="320" y="225" text-anchor="middle" font-size="12" font-weight="600" fill="var(--landing-text)">APIs</text>
+      <text x="320" y="240" text-anchor="middle" font-size="9" fill="var(--landing-text-muted)">MCP Server</text>
+    </g>
+    
+    <!-- Security Shield -->
+    <g class="shield" transform="translate(285, 100)">
+      <path d="M20 0 L40 10 L40 30 L20 45 L0 30 L0 10 Z" fill="var(--landing-gradient-from)" fill-opacity="0.2" stroke="var(--landing-accent-dot)" stroke-width="2"/>
+      <text x="20" y="28" text-anchor="middle" font-size="14" fill="var(--landing-accent-dot)">🛡</text>
+    </g>
+  </svg>
+  
+  <div class="mt-4 text-center">
+    <p class="text-sm" style="color: var(--landing-text-secondary);">
+      Arbitus acts as a security proxy between AI agents and MCP servers
+    </p>
+  </div>
+</div>
+
+<style>
+  .architecture-diagram {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .architecture-diagram svg text {
+    font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  }
+</style>

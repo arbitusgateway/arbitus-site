@@ -1,0 +1,68 @@
+---
+interface Props {
+  type?: 'text' | 'title' | 'image' | 'card' | 'code';
+  lines?: number;
+  class?: string;
+}
+
+const { type = 'text', lines = 1, class: className = '' } = Astro.props;
+---
+
+{type === 'text' && (
+  <div class={`animate-pulse ${className}`}>
+    {Array.from({ length: lines }).map(() => (
+      <div class="h-4 rounded mb-2" style="background-color: var(--landing-card-bg-hover);"></div>
+    ))}
+  </div>
+)}
+
+{type === 'title' && (
+  <div class={`animate-pulse ${className}`}>
+    <div class="h-8 rounded w-3/4" style="background-color: var(--landing-card-bg-hover);"></div>
+  </div>
+)}
+
+{type === 'image' && (
+  <div class={`animate-pulse ${className}`}>
+    <div class="rounded-lg" style="background-color: var(--landing-card-bg-hover); aspect-ratio: 16/9;"></div>
+  </div>
+)}
+
+{type === 'card' && (
+  <div class={`animate-pulse rounded-xl p-6 ${className}`} style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+    <div class="h-4 rounded w-1/2 mb-4" style="background-color: var(--landing-card-bg-hover);"></div>
+    <div class="space-y-2">
+      <div class="h-3 rounded w-full" style="background-color: var(--landing-card-bg-hover);"></div>
+      <div class="h-3 rounded w-5/6" style="background-color: var(--landing-card-bg-hover);"></div>
+      <div class="h-3 rounded w-4/6" style="background-color: var(--landing-card-bg-hover);"></div>
+    </div>
+  </div>
+)}
+
+{type === 'code' && (
+  <div class={`animate-pulse rounded-xl overflow-hidden ${className}`} style="background-color: var(--landing-code-bg); border: 1px solid var(--landing-card-border);">
+    <div class="px-4 py-2 space-y-2">
+      {Array.from({ length: 5 }).map(() => (
+        <div class="flex gap-4">
+          <div class="h-3 w-8 rounded" style="background-color: var(--landing-card-border);"></div>
+          <div class="h-3 w-3/4 rounded" style="background-color: var(--landing-card-bg-hover);"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  @keyframes skeleton-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .animate-pulse {
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>

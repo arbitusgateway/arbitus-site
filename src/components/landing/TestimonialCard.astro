@@ -1,0 +1,41 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="testimonial-card rounded-xl p-6 transition-all duration-300 hover:scale-[1.02]" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+  <div class="flex items-start gap-4">
+    <div class="flex-shrink-0">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold" style="background-color: var(--landing-gradient-from); color: white;">
+        {title?.charAt(0) || 'A'}
+      </div>
+    </div>
+    <div class="flex-1">
+      {title && (
+        <h4 class="font-semibold mb-1" style="color: var(--landing-text);">
+          {title}
+        </h4>
+      )}
+      {subtitle && (
+        <p class="text-sm mb-3" style="color: var(--landing-text-secondary);">
+          {subtitle}
+        </p>
+      )}
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .testimonial-card {
+    cursor: default;
+  }
+  
+  .testimonial-card:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  }
+</style>

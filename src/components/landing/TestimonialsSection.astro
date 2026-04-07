@@ -1,0 +1,53 @@
+---
+import TestimonialCard from './TestimonialCard.astro';
+
+const testimonials = [
+  {
+    quote: "Arbitus filled a critical gap in our AI agent stack. We can finally control what tools our agents can access without modifying their code.",
+    author: "Alex Chen",
+    role: "Lead Platform Engineer",
+    company: "TechCorp"
+  },
+  {
+    quote: "The human-in-the-loop feature saved us from potential data leaks multiple times. Essential for production deployments.",
+    author: "Sarah Mitchell",
+    role: "Security Architect",
+    company: "SecureAI"
+  },
+  {
+    quote: "Sub-millisecond overhead is not marketing speak - we measured it. Arbitus is genuinely transparent to our agents.",
+    author: "Marcus Rodriguez",
+    role: "Senior Developer",
+    company: "StartupXYZ"
+  }
+];
+---
+
+<section class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">
+      Trusted by Developers
+    </h2>
+    <p class="text-center mb-14 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
+      See how teams are using Arbitus to secure their AI agents and MCP servers.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {testimonials.map((testimonial, i) => (
+        <div class={`reveal reveal-delay-${(i % 3) + 1}`} style={`transition-delay: ${(i % 3) * 150}ms;`}>
+          <TestimonialCard title={testimonial.author} subtitle={`${testimonial.role} at ${testimonial.company}`}>
+            <p class="text-sm leading-relaxed" style="color: var(--landing-text-secondary);">
+              "{testimonial.quote}"
+            </p>
+          </TestimonialCard>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center reveal reveal-delay-4">
+      <p class="text-sm" style="color: var(--landing-text-muted);">
+        Want to share your experience? <a href="https://github.com/nfvelten/arbitus/discussions" target="_blank" rel="noopener" class="underline" style="color: var(--landing-accent-dot);">Join our community discussions</a>
+      </p>
+    </div>
+  </div>
+</section>

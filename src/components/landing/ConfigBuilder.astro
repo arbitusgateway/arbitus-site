@@ -1,0 +1,196 @@
+---
+interface ConfigField {
+  name: string;
+  label: string;
+  type: 'text' | 'number' | 'select' | 'boolean';
+  default?: string | number | boolean;
+  options?: string[];
+  description?: string;
+}
+
+interface Props {
+  title?: string;
+  fields?: ConfigField[];
+}
+
+const { title = 'Configuration Builder', fields = [] } = Astro.props;
+
+const defaultFields: ConfigField[] = [
+  {
+    name: 'transport.type',
+    label: 'Transport Type',
+    type: 'select',
+    default: 'http',
+    options: ['http', 'stdio'],
+    description: 'How agents connect to Arbitus'
+  },
+  {
+    name: 'transport.addr',
+    label: 'Listen Address',
+    type: 'text',
+    default: '0.0.0.0:4000',
+    description: 'Address to bind (HTTP only)'
+  },
+  {
+    name: 'transport.upstream',
+    label: 'Upstream URL',
+    type: 'text',
+    default: 'http://localhost:3000/mcp',
+    description: 'MCP server address'
+  }
+];
+
+const allFields = fields.length > 0 ? fields : defaultFields;
+---
+
+<div class="config-builder rounded-xl overflow-hidden" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+  <div class="px-6 py-4" style="border-bottom: 1px solid var(--landing-card-border);">
+    <h3 class="text-lg font-bold" style="color: var(--landing-text);">{title}</h3>
+    <p class="text-sm mt-1" style="color: var(--landing-text-secondary);">Configure yourgateway interactively</p>
+  </div>
+  
+  <div class="p-6 space-y-4">
+    {allFields.map(field => (
+      <div class="space-y-2">
+        <label class="block text-sm font-semibold" style="color: var(--landing-text);">
+          {field.label}
+        </label>
+        {field.description && (
+          <p class="text-xs" style="color: var(--landing-text-muted);">{field.description}</p>
+        )}
+        
+        {field.type === 'text' && (
+          <input 
+            type="text"
+            name={field.name}
+            value={field.default}
+            class="config-input w-full px-3 py-2 rounded-lg text-sm font-mono"
+            style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);"
+          />
+        )}
+        
+        {field.type === 'number' && (
+          <input 
+            type="number"
+            name={field.name}
+            value={field.default}
+            class="config-input w-full px-3 py-2 rounded-lg text-sm"
+            style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);"
+          />
+        )}
+        
+        {field.type === 'select' && (
+          <select 
+            name={field.name}
+            class="config-input w-full px-3 py-2 rounded-lg text-sm"
+            style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);"
+          >
+            {field.options?.map(option => (
+              <option value={option} selected={option === field.default}>
+                {option}
+              </option>
+            ))}
+          </select>
+        )}
+        
+        {field.type === 'boolean' && (
+          <label class="flex items-center gap-2">
+            <input 
+              type="checkbox"
+              name={field.name}
+              checked={field.default === true}
+              class="config-checkbox w-4 h-4 rounded"
+              style="accent-color: var(--landing-accent-dot);"
+            />
+            <span class="text-sm" style="color: var(--landing-text-secondary);">Enable</span>
+          </label>
+        )}
+      </div>
+    ))}
+    
+    <button 
+      id="generate-config"
+      class="w-full mt-4 px-4 py-2 rounded-lg font-semibold transition-all hover:scale-[1.02]"
+      style="background-color: var(--landing-btn-primary-bg); color: var(--landing-btn-primary-text);"
+    >
+      Generate Configuration
+    </button>
+  </div>
+  
+  <div id="config-output" class="hidden px-6 pb-6">
+    <div class="rounded-lg p-4 font-mono text-sm overflow-x-auto" style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border);">
+      <pre id="config-yaml"></pre>
+    </div>
+    <button 
+      id="copy-config"
+      class="mt-3 px-4 py-2 rounded-lg text-sm transition-all"
+      style="background-color: var(--landing-card-bg-hover); color: var(--landing-text); border: 1px solid var(--landing-card-border);"
+    >
+      Copy to Clipboard
+    </button>
+  </div>
+</div>
+
+<script>
+  const generateBtn = document.getElementById('generate-config');
+  const configOutput = document.getElementById('config-output');
+  const configYaml = document.getElementById('config-yaml');
+  const copyBtn = document.getElementById('copy-config');
+  
+  generateBtn?.addEventListener('click', () => {
+    const inputs = document.querySelectorAll('.config-input, .config-checkbox');
+    const config: Record<string, any> = {};
+    
+    inputs.forEach(input => {
+      const name = input.getAttribute('name');
+      if (!name) return;
+      
+      let value: any;
+      if (input instanceof HTMLInputElement && input.type === 'checkbox') {
+        value = input.checked;
+      } else if (input instanceof HTMLInputElement && input.type === 'number') {
+        value = parseInt(input.value) || input.value;
+      } else {
+        value = input.value;
+      }
+      
+      // Handle nested keys
+      const keys = name.split('.');
+      let current = config;
+      keys.forEach((key, i) => {
+        if (i === keys.length - 1) {
+          current[key] = value;
+        } else {
+          current[key] = current[key] || {};
+          current = current[key];
+        }
+      });
+    });
+    
+    // Generate YAML
+    const yaml = generateYaml(config, '');
+    if (configYaml) configYaml.textContent = yaml;
+    configOutput?.classList.remove('hidden');
+  });
+  
+  function generateYaml(obj: any, indent: string): string {
+    let yaml = '';
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        yaml += `${indent}${key}:\n${generateYaml(value, indent + '  ')}`;
+      } else {
+        yaml += `${indent}${key}: ${typeof value === 'string' ? `"${value}"` : value}\n`;
+      }
+    }
+    return yaml;
+  }
+  
+  copyBtn?.addEventListener('click', async () => {
+    const text = configYaml?.textContent || '';
+    await navigator.clipboard.writeText(text);
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => {
+      copyBtn.textContent = 'Copy to Clipboard';
+    }, 2000);
+  });
+</script>

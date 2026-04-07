@@ -1,0 +1,164 @@
+---
+const commands = [
+  { name: 'Home', shortcut: '⌘H', href: '/' },
+  { name: 'Documentation', shortcut: '⌘D', href: '/docs' },
+  { name: 'Getting Started', shortcut: '⌘G', href: '/docs/getting-started' },
+  { name: 'Configuration', shortcut: '⌘C', href: '/docs/configuration' },
+  { name: 'GitHub Repository', shortcut: '⌘⇧G', href: 'https://github.com/nfvelten/arbitus', external: true },
+  { name: 'Toggle Theme', shortcut: '⌘⇧D', action: 'toggle-theme' },
+  { name: 'Search', shortcut: '/', href: '#', action: 'search' },
+];
+
+const groups = [
+  {
+    title: 'Navigation',
+    commands: commands.filter(c => !c.action || c.action === 'search'),
+  },
+  {
+    title: 'Actions',
+    commands: commands.filter(c => c.action && c.action !== 'search'),
+  },
+];
+---
+
+<div id="command-palette-container" class="hidden fixed inset-0 z-[100]">
+  <!-- Backdrop -->
+  <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.5);" id="command-palette-backdrop"></div>
+  
+  <!-- Modal -->
+  <div class="relative flex items-start justify-center pt-20 px-4">
+    <div class="w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+      <!-- Search Input -->
+      <div class="flex items-center gap-3 px-4 py-3" style="border-bottom: 1px solid var(--landing-card-border);">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--landing-text-muted);">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input 
+          type="text" 
+          id="command-palette-input"
+          placeholder="Search commands..." 
+          class="flex-1 bg-transparent outline-none text-sm"
+          style="color: var(--landing-text);"
+        />
+        <kbd class="px-2 py-1 text-xs rounded" style="background-color: var(--landing-badge-bg); border: 1px solid var(--landing-badge-border); color: var(--landing-badge-text);">
+          ESC
+        </kbd>
+      </div>
+      
+      <!-- Commands List -->
+      <div class="max-h-96 overflow-auto" id="command-palette-list">
+        {groups.map(group => (
+          <div class="py-2">
+            <div class="px-4 py-1 text-xs font-semibold uppercase" style="color: var(--landing-text-muted);">
+              {group.title}
+            </div>
+            {group.commands.map(command => (
+              <a
+                href={command.action ? '#' : command.href}
+                target={command.external ? '_blank' : undefined}
+                rel={command.external ? 'noopener' : undefined}
+                data-action={command.action}
+                class="command-item flex items-center justify-between px-4 py-2 transition-colors"
+                style="color: var(--landing-text);"
+              >
+                <span>{command.name}</span>
+                <kbd class="px-2 py-1 text-xs rounded" style="background-color: var(--landing-badge-bg); border: 1px solid var(--landing-badge-border); color: var(--landing-badge-text);">
+                  {command.shortcut}
+                </kbd>
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .command-item:hover {
+    background-color: var(--landing-card-bg-hover);
+  }
+  
+  .command-item.selected {
+    background-color: var(--landing-table-highlight);
+  }
+</style>
+
+<script>
+  const container = document.getElementById('command-palette-container');
+  const backdrop = document.getElementById('command-palette-backdrop');
+  const input = document.getElementById('command-palette-input') as HTMLInputElement;
+  const commands = document.querySelectorAll('.command-item');
+  
+  let selectedIndex = -1;
+  
+  function openPalette() {
+    container?.classList.remove('hidden');
+    input?.focus();
+    selectedIndex = -1;
+  }
+  
+  function closePalette() {
+    container?.classList.add('hidden');
+    input.value = '';
+    selectedIndex = -1;
+    updateSelection();
+  }
+  
+  function updateSelection() {
+    commands.forEach((cmd, i) => {
+      cmd.classList.toggle('selected', i === selectedIndex);
+    });
+  }
+  
+  function executeCommand(command) {
+    const action = command.getAttribute('data-action');
+    const href = command.getAttribute('href');
+    
+    if (action === 'toggle-theme') {
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle?.click();
+      closePalette();
+    } else if (action === 'search') {
+      closePalette();
+      const searchTrigger = document.querySelector('[data-action="search"]');
+      (searchTrigger as HTMLElement)?.click();
+    } else if (href && href !== '#') {
+      window.location.href = href;
+    }
+  }
+  
+  // Open with Ctrl/Cmd + K
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      if (container?.classList.contains('hidden')) {
+        openPalette();
+      } else {
+        closePalette();
+      }
+    }
+    
+    if (!container?.classList.contains('hidden')) {
+      if (e.key === 'Escape') {
+        closePalette();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, commands.length - 1);
+        updateSelection();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+      } else if (e.key === 'Enter' && selectedIndex >= 0) {
+        executeCommand(commands[selectedIndex]);
+      }
+    }
+  });
+  
+  backdrop?.addEventListener('click', closePalette);
+  
+  commands.forEach(cmd => {
+    cmd.addEventListener('click', () => executeCommand(cmd));
+  });
+</script>
