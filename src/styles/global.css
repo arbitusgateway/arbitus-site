@@ -143,6 +143,11 @@ html {
 
 .landing-body {
 	color: var(--landing-text);
+	background-color: transparent;
+}
+
+html, body {
+	background-color: transparent;
 }
 
 /* ─── Global Animations ─── */
