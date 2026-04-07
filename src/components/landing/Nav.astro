@@ -137,16 +137,33 @@ const links = [
 
     if (nav) {
       const update = () => {
-        if (window.scrollY > 20) {
-          nav.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-bg');
+        const scrollY = window.scrollY;
+        if (scrollY > 20) {
+          const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-bg').trim();
+          nav.style.backgroundColor = bgColor;
           nav.style.backdropFilter = 'blur(12px)';
         } else {
           nav.style.backgroundColor = 'transparent';
           nav.style.backdropFilter = 'none';
         }
       };
+      
       window.addEventListener('scroll', update, { passive: true });
       update();
+      
+      // Update nav background when theme changes
+      const themeObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'data-theme') {
+            update();
+          }
+        });
+      });
+      
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
     }
 
     if (menuBtn && menu) {
