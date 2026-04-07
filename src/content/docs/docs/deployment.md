@@ -7,14 +7,14 @@ description: Docker, Helm, HTTPS, mTLS, stdio mode, and graceful shutdown.
 
 ```sh
 # Pull the latest image
-docker pull ghcr.io/nfvelten/arbitus:latest
+docker pull ghcr.io/arbitusgateway/arbitus:latest
 
 # Run with your config file
 docker run --rm \
   -p 4000:4000 \
   -v $(pwd)/gateway.yml:/app/gateway.yml:ro \
   -e ARBITUS_ADMIN_TOKEN=your-secret \
-  ghcr.io/nfvelten/arbitus:latest
+  ghcr.io/arbitusgateway/arbitus:latest
 
 # Or with docker-compose (includes healthcheck and audit log persistence)
 docker compose up

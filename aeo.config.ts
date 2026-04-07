@@ -22,7 +22,7 @@ export default defineConfig({
 			url: 'https://arbitus-gateway.xyz',
 			logo: 'https://arbitus-gateway.xyz/arbitus-logo.png',
 			sameAs: [
-				'https://github.com/nfvelten/arbitus',
+				'https://github.com/arbitusgateway/arbitus',
 			],
 		},
 		defaultType: 'SoftwareApplication',

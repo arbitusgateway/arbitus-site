@@ -16,10 +16,10 @@ export default defineConfig({
 				alt: 'Arbitus',
 			},
 			social: [
-				{ icon: 'github', label: 'GitHub', href: 'https://github.com/nfvelten/arbitus' },
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/arbitusgateway/arbitus' },
 			],
 			editLink: {
-				baseUrl: 'https://github.com/nfvelten/arbitus-site/edit/main/',
+				baseUrl: 'https://github.com/arbitusgateway/arbitus-site/edit/main/',
 			},
 			sidebar: [
 				{
