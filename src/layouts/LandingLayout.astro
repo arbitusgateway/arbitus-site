@@ -6,6 +6,7 @@ import { ClientRouter } from 'astro:transitions';
 import BackgroundEffect from '../components/landing/BackgroundEffect.astro';
 import ScrollProgress from '../components/landing/ScrollProgress.astro';
 import BackToTop from '../components/landing/BackToTop.astro';
+import CommandPalette from '../components/landing/CommandPalette.astro';
 
 interface Props {
   title?: string;
@@ -91,6 +92,7 @@ const canonical = new URL(Astro.url.pathname, 'https://arbitus-gateway.xyz');
   <body class="font-sans antialiased">
     <BackgroundEffect />
     <ScrollProgress />
+    <CommandPalette />
     <slot />
     <BackToTop />
   </body>

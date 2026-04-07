@@ -1,11 +1,5 @@
 ---
-const diagram = `Agent (Cursor, Claude, etc.)
-        │  JSON-RPC
-        ▼
-      arbitus  ← auth, rate limit, HITL, filter, audit
-        │
-        ▼
-  MCP Server (filesystem, database, APIs...)`;
+import ArchitectureDiagram from './ArchitectureDiagram.astro';
 ---
 
 <section class="pt-32 pb-20 px-6 animate-fade-in">
@@ -55,8 +49,8 @@ const diagram = `Agent (Cursor, Claude, etc.)
       MIT Licensed&nbsp;&middot;&nbsp;Pure Rust&nbsp;&middot;&nbsp;Sub-millisecond overhead
     </p>
 
-    <div class="mt-14 max-w-lg mx-auto animate-slide-up [animation-delay:1000ms] opacity-0 [animation-fill-mode:forwards]">
-      <pre class="text-left text-[11px] sm:text-sm md:text-base font-mono rounded-xl p-4 sm:p-6 leading-relaxed overflow-x-auto shadow-2xl" style="background-color: var(--landing-code-bg); color: var(--landing-code-text); border: 1px solid var(--landing-card-border); transition: transform 0.3s ease-out; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'"><code set:text={diagram} /></pre>
+    <div class="mt-14 max-w-2xl mx-auto animate-slide-up [animation-delay:1000ms] opacity-0 [animation-fill-mode:forwards]">
+      <ArchitectureDiagram />
     </div>
   </div>
 </section>
