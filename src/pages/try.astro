@@ -1,0 +1,70 @@
+---
+import LandingLayout from '../layouts/LandingLayout.astro';
+import Nav from '../components/landing/Nav.astro';
+import ConfigBuilder from '../components/landing/ConfigBuilder.astro';
+import Footer from '../components/landing/Footer.astro';
+---
+
+<LandingLayout title="Try Arbitus — Interactive Config Builder">
+  <Nav />
+  <main class="py-20 px-6">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold text-center mb-4 reveal">
+        Configure Your Gateway
+      </h1>
+      <p class="text-center mb-12 max-w-2xl mx-auto reveal reveal-delay-1" style="color: var(--landing-text-secondary);">
+        Build your <code class="font-mono px-2 py-0.5 rounded" style="background-color: var(--landing-code-bg); color: var(--landing-code-accent);">gateway.yml</code> interactively. Select your transport, configure agents, and set security rules.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="reveal reveal-delay-2">
+          <ConfigBuilder />
+        </div>
+
+        <div class="reveal reveal-delay-3 space-y-6">
+          <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+            <h3 class="text-lg font-bold mb-3" style="color: var(--landing-text);">Quick Tips</h3>
+            <ul class="space-y-3 text-sm" style="color: var(--landing-text-secondary);">
+              <li class="flex gap-2">
+                <span style="color: var(--landing-accent-dot);">•</span>
+                <span><strong>HTTP transport</strong> is best for production deployments with multiple agents</span>
+              </li>
+              <li class="flex gap-2">
+                <span style="color: var(--landing-accent-dot);">•</span>
+                <span><strong>stdio transport</strong> is ideal for single-agent local development</span>
+              </li>
+              <li class="flex gap-2">
+                <span style="color: var(--landing-accent-dot);">•</span>
+                <span>Each agent can have its own <strong>rate limits</strong> and <strong>tool permissions</strong></span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="rounded-xl p-6" style="background-color: var(--landing-card-bg); border: 1px solid var(--landing-card-border);">
+            <h3 class="text-lg font-bold mb-3" style="color: var(--landing-text);">Need More Options?</h3>
+            <p class="text-sm mb-4" style="color: var(--landing-text-secondary);">
+              This builder covers the basics. For advanced features like OPA policies, HITL approval, and shadow mode, see the full configuration reference.
+            </p>
+            <a 
+              href="/docs/configuration" 
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              style="background-color: var(--landing-btn-outline-border); color: var(--landing-text);"
+            >
+              View Full Configuration
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14m-7-7 7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center reveal reveal-delay-4">
+        <p class="text-sm" style="color: var(--landing-text-muted);">
+          Ready to deploy? <a href="/docs/deployment" class="underline" style="color: var(--landing-accent-dot);">Learn about Docker, Helm, and mTLS options</a>
+        </p>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</LandingLayout>
