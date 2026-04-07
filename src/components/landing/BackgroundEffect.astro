@@ -1,104 +1,70 @@
 ---
 ---
 
-<div class="background-container fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-  <div class="grid-effect"></div>
-  <div class="glow-effect"></div>
-  <div class="synapses-effect"></div>
+<div class="bg-container">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
 </div>
 
 <style>
-  .background-container {
+  .bg-container {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    pointer-events: none;
     background-color: var(--landing-bg);
   }
 
-  .grid-effect {
+  .bg-grid {
     position: absolute;
     inset: 0;
+    background-size: 60px 60px;
     background-image: 
-      linear-gradient(to right, #e4e4e7 1px, transparent 1px),
-      linear-gradient(to bottom, #e4e4e7 1px, transparent 1px);
-    background-size: 40px 40px;
-    mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 80%);
-    opacity: 0.4;
+      linear-gradient(to right, rgba(156, 163, 175, 0.15) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(156, 163, 175, 0.15) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 100%);
   }
 
-  html[data-theme='dark'] .grid-effect {
+  :global(html[data-theme='dark']) .bg-grid {
     background-image: 
-      linear-gradient(to right, #27272a 1px, transparent 1px),
-      linear-gradient(to bottom, #27272a 1px, transparent 1px);
-    opacity: 0.3;
+      linear-gradient(to right, rgba(113, 113, 122, 0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(113, 113, 122, 0.2) 1px, transparent 1px);
   }
 
-  .glow-effect {
+  .bg-glow {
     position: absolute;
-    top: -10%;
+    top: -20%;
     left: 50%;
     transform: translateX(-50%);
-    width: 150%;
-    height: 60%;
+    width: 200%;
+    height: 80%;
     background: radial-gradient(
-      ellipse at center,
-      rgba(6, 182, 212, 0.12) 0%,
-      rgba(6, 182, 212, 0.05) 30%,
-      transparent 70%
+      circle at center,
+      rgba(6, 182, 212, 0.2) 0%,
+      rgba(6, 182, 212, 0.1) 20%,
+      transparent 60%
     );
-    pointer-events: none;
+    filter: blur(40px);
   }
 
-  html[data-theme='dark'] .glow-effect {
+  :global(html[data-theme='dark']) .bg-glow {
     background: radial-gradient(
-      ellipse at center,
-      rgba(34, 211, 238, 0.08) 0%,
-      rgba(34, 211, 238, 0.03) 30%,
-      transparent 70%
+      circle at center,
+      rgba(34, 211, 238, 0.15) 0%,
+      rgba(34, 211, 238, 0.08) 20%,
+      transparent 60%
     );
+    filter: blur(60px);
   }
 
-  .synapses-effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 300px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(6, 182, 212, 0.03) 50%,
-      transparent 100%
-    );
-    animation: scan 10s ease-in-out infinite;
-    opacity: 0.6;
-  }
-
-  html[data-theme='dark'] .synapses-effect {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(34, 211, 238, 0.02) 50%,
-      transparent 100%
-    );
-  }
-
-  @keyframes scan {
+  @keyframes pulse {
     0%, 100% {
-      transform: translateY(-100%);
-      opacity: 0;
+      opacity: 0.8;
     }
     50% {
-      opacity: 0.6;
-    }
-    100% {
-      transform: translateY(calc(100vh - 100%));
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .synapses-effect {
-      animation: none;
-      opacity: 0.3;
+      opacity: 1;
     }
   }
 </style>
