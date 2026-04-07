@@ -142,7 +142,6 @@ html {
 }
 
 .landing-body {
-	background-color: var(--landing-bg);
 	color: var(--landing-text);
 }
 
