@@ -99,10 +99,12 @@ const links = [
   function updateThemeIcons() {
     const isDark = document.documentElement.dataset.theme === 'dark';
     ['theme-icon-sun', 'theme-icon-sun-m'].forEach(id => {
-      document.getElementById(id)?.classList.toggle('hidden', !isDark);
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden', !isDark);
     });
     ['theme-icon-moon', 'theme-icon-moon-m'].forEach(id => {
-      document.getElementById(id)?.classList.toggle('hidden', isDark);
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden', isDark);
     });
   }
 
@@ -115,29 +117,50 @@ const links = [
     updateThemeIcons();
   }
 
-  updateThemeIcons();
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+  function initNav() {
+    updateThemeIcons();
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    if (themeToggleMobile) {
+      themeToggleMobile.addEventListener('click', toggleTheme);
+    }
 
-  const nav = document.getElementById('nav');
-  const menuBtn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
+    const nav = document.getElementById('nav');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
 
-  if (nav) {
-    const update = () => {
-      if (window.scrollY > 20) {
-        nav.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-bg');
-        nav.style.backdropFilter = 'blur(12px)';
-      } else {
-        nav.style.backgroundColor = 'transparent';
-        nav.style.backdropFilter = 'none';
-      }
-    };
-    window.addEventListener('scroll', update, { passive: true });
-    update();
+    if (nav) {
+      const update = () => {
+        if (window.scrollY > 20) {
+          nav.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-bg');
+          nav.style.backdropFilter = 'blur(12px)';
+        } else {
+          nav.style.backgroundColor = 'transparent';
+          nav.style.backdropFilter = 'none';
+        }
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    }
+
+    if (menuBtn && menu) {
+      menuBtn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    }
   }
 
-  if (menuBtn && menu) {
-    menuBtn.addEventListener('click', () => menu.classList.toggle('hidden'));
+  // Initialize on first load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNav);
+  } else {
+    initNav();
   }
+
+  // Re-initialize after Astro View Transitions
+  document.addEventListener('astro:page-load', initNav);
 </script>
