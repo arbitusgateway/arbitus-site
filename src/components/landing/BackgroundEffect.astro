@@ -2,7 +2,7 @@
 ---
 
 <div class="background-container fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-  <div class="grid-effect opacity-[0.4] dark:opacity-[0.2]"></div>
+  <div class="grid-effect"></div>
   <div class="glow-effect"></div>
   <div class="synapses-effect"></div>
 </div>
@@ -16,53 +16,89 @@
     position: absolute;
     inset: 0;
     background-image: 
-      linear-gradient(to right, var(--color-gray-200) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-gray-200) 1px, transparent 1px);
+      linear-gradient(to right, #e4e4e7 1px, transparent 1px),
+      linear-gradient(to bottom, #e4e4e7 1px, transparent 1px);
     background-size: 40px 40px;
-    mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+    mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at 50% 30%, black 40%, transparent 80%);
+    opacity: 0.4;
   }
 
-  :root[data-theme='dark'] .grid-effect {
+  html[data-theme='dark'] .grid-effect {
     background-image: 
-      linear-gradient(to right, var(--color-gray-800) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-gray-800) 1px, transparent 1px);
+      linear-gradient(to right, #27272a 1px, transparent 1px),
+      linear-gradient(to bottom, #27272a 1px, transparent 1px);
+    opacity: 0.3;
   }
 
   .glow-effect {
     position: absolute;
-    top: 0;
+    top: -10%;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    height: 100%;
+    width: 150%;
+    height: 60%;
     background: radial-gradient(
-      circle at 50% 0%,
-      rgba(6, 182, 212, 0.15) 0%,
+      ellipse at center,
+      rgba(6, 182, 212, 0.12) 0%,
+      rgba(6, 182, 212, 0.05) 30%,
       transparent 70%
     );
+    pointer-events: none;
   }
 
-  :root[data-theme='dark'] .glow-effect {
+  html[data-theme='dark'] .glow-effect {
     background: radial-gradient(
-      circle at 50% 0%,
+      ellipse at center,
       rgba(34, 211, 238, 0.08) 0%,
+      rgba(34, 211, 238, 0.03) 30%,
       transparent 70%
     );
-  }
-
-  /* Optional: Subtle animation for the synapses-like grid lines */
-  @keyframes scan {
-    from { transform: translateY(-100%); }
-    to { transform: translateY(100%); }
   }
 
   .synapses-effect {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.05), transparent);
-    height: 200px;
-    width: 100%;
-    animation: scan 8s linear infinite;
-    opacity: 0.5;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(6, 182, 212, 0.03) 50%,
+      transparent 100%
+    );
+    animation: scan 10s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  html[data-theme='dark'] .synapses-effect {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(34, 211, 238, 0.02) 50%,
+      transparent 100%
+    );
+  }
+
+  @keyframes scan {
+    0%, 100% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(calc(100vh - 100%));
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .synapses-effect {
+      animation: none;
+      opacity: 0.3;
+    }
   }
 </style>
