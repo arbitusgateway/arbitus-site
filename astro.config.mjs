@@ -4,6 +4,8 @@ import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
 import { aeoAstroIntegration } from 'aeo.js/astro';
 
+const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('build');
+
 export default defineConfig({
 	site: 'https://arbitus-gateway.xyz',
 	integrations: [
@@ -56,7 +58,7 @@ export default defineConfig({
 				},
 			],
 		}),
-		aeoAstroIntegration({
+		isProduction ? aeoAstroIntegration({
 			title: 'Arbitus',
 			description: 'The security proxy for AI agents and MCP servers',
 			url: 'https://arbitus-gateway.xyz',
@@ -68,8 +70,8 @@ export default defineConfig({
 					logo: 'https://arbitus-gateway.xyz/arbitus-logo.png',
 				},
 			},
-		}),
-	],
+		}) : null,
+	].filter(Boolean),
 	markdown: {
 		shikiConfig: {
 			themes: {
