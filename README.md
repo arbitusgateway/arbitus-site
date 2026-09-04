@@ -34,7 +34,6 @@ Images can be added to `src/assets/` and embedded in Markdown with a relative li
 Static assets, like favicons, can be placed in the `public/` directory.
 
 The project includes [Tailwind CSS](https://starlight.astro.build/guides/css-and-tailwind/#tailwind-css) for styling. Customize your design by modifying `src/styles/global.css`.
-
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
